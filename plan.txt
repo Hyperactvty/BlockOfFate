@@ -1,0 +1,17 @@
+TIERS
+
+SSS 	-> Godlike / God-Tier
+SS 	-> Exotic/ Relic
+S 	-> Legendary
+A 	-> Epic
+B 	-> Rare
+C 	-> Uncommon
+D 	-> Common
+F 	-> Junk / Trash
+CURSE	-> Cursed
+
+
+Introduce a new enchantment or passive effect that increases the 
+odds of rolling a better result.
+
+Have various biome-specific results, which will come from biome-typed blocks
