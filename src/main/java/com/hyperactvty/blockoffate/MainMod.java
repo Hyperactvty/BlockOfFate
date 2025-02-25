@@ -30,7 +30,18 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(MainMod.MODID)
@@ -46,7 +57,10 @@ public class MainMod {
     // Create a Deferred Register to hold CreativeModeTabs which will all be registered under the "blockoffate" namespace
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
-
+    public static Fate fateObject;
+    public static JSONObject cfg;
+    public static JSONArray fatePools = new JSONArray();
+    public static JSONArray rates = new JSONArray();
 
     /**
      *  DEVELOPMENT CODE
@@ -150,11 +164,44 @@ public class MainMod {
         }
     }
 
+    public static JSONObject loadConfig() {
+        try {
+            String configPath = "./config/blockoffate_config.json";
+            String content = new String(Files.readAllBytes(Paths.get(configPath)));
+
+            // Convert string to JSONObject
+            JSONObject jsonObject = new JSONObject(content);
+
+            // Print the entire JSON object
+            System.out.println(jsonObject.toString(4)); // Pretty print with indentation
+
+            // Access specific fields
+            rates = (JSONArray) jsonObject.get("rates");
+            fatePools = (JSONArray) jsonObject.get("fates");
+
+            fateObject = new Fate(rates);
+            System.out.println(fatePools.length()+" pools loaded.");
+            Fate.onStartUp(); // OR fateObject.onStartUp();
+
+
+            return new JSONObject(content);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new JSONObject();
+        }
+    }
+
+    public static void onWorldLoad(String[] args) {
+
+    }
+
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
         // Do something when the server starts
         LOGGER.info("HELLO from server starting");
+        cfg = loadConfig();
+        onWorldLoad(null);
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent

@@ -3,7 +3,9 @@ package com.hyperactvty.blockoffate;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -21,8 +23,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minidev.json.JSONObject;
+import org.json.JSONArray;
+
+import java.util.*;
 
 public class BlockOfFate_Block extends Block { //BoF_Generic_BLOCK
     public BlockOfFate_Block(Properties properties) {
@@ -30,22 +39,40 @@ public class BlockOfFate_Block extends Block { //BoF_Generic_BLOCK
     }
 
     private final String mod_group_id="com.hyperactvty.blockoffate";
+    Random random = new Random();
+    private static Rate rObj = new Rate(null, null, null, 0, null, null);
 
+
+    @SubscribeEvent
+    public static void onBlockBreak(BlockEvent.BreakEvent event) {
+        System.out.println("BLOCK BROKEN");
+        if (!event.getPlayer().level().isClientSide) { // Server-side check
+            ServerLevel world = (ServerLevel) event.getPlayer().level();
+            double x = event.getPos().getX() + 0.5;
+            double y = event.getPos().getY() + 0.5;
+            double z = event.getPos().getZ() + 0.5;
+
+            // Spawn explosion particles at broken block position
+            System.out.println("Displaying Particle > "+rObj.particleType()!= null ? (ParticleOptions) rObj.particleType() : ParticleTypes.SPIT);
+            world.sendParticles(rObj.particleType()!= null ? (ParticleOptions) rObj.particleType() : ParticleTypes.SPIT, x, y, z, 20, 0.5, 0.5, 0.5, 0.02);
+        }
+        else {
+            System.out.println("IN THE ELSE");
+        }
+    }
 
     @Override
     public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
         super.onRemove(state, world, pos, newState, isMoving);
 
         if (!world.isClientSide && state.getBlock() != newState.getBlock()) {
-            determineFate(state, world, pos, newState); // Determines the FATE
-            LogUtils.getLogger().info("BROKE BLOCK >> {} @ [{}, {}, {}]", state.getBlock().getName(), pos.getX(), pos.getY(), pos.getZ());
-            // Drop an item when the block is removed
-//            ItemEntity drop = new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(Items.EMERALD));
-//            world.addFreshEntity(drop);
+            Rate _det = determineFate(state, world, pos, newState); // Determines the FATE
+            FateExecution.Execute(_det, state, world, pos, newState, isMoving);
 
-//            if (!world.isClientSide && state.getBlock() == BoF_Generic_BLOCK.get()) {
-            ItemEntity extraDrop = new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(Items.DIAMOND));
-            world.addFreshEntity(extraDrop);
+            LogUtils.getLogger().info("BROKE BLOCK >> {} @ [{}, {}, {}]", state.getBlock().getName(), pos.getX(), pos.getY(), pos.getZ());
+
+//            ItemEntity extraDrop = new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(Items.DIAMOND));
+//            world.addFreshEntity(extraDrop);
 
             // Play a custom sound
             world.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -53,7 +80,7 @@ public class BlockOfFate_Block extends Block { //BoF_Generic_BLOCK
             // Get the player breaking the block
             Player player = world.getNearestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false);
 
-            if (player != null) {
+            if (player != null && false==true) {
                 // Generate random teleport coordinates within 10 blocks
                 double newX = pos.getX() + (world.random.nextInt(20) - 10);
                 double newY = pos.getY() + (world.random.nextInt(5) - 2); // Keeps Y-level more stable
@@ -110,16 +137,75 @@ public class BlockOfFate_Block extends Block { //BoF_Generic_BLOCK
             double y = pos.getY() + 0.5 + (random.nextDouble() - 0.5) * 0.6;
             double z = pos.getZ() + 0.5 + (random.nextDouble() - 0.5) * 0.6;
 
-            world.addParticle(ParticleTypes.CHERRY_LEAVES, x, y, z, 0, 0.02, 0);
+            world.addParticle(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, x, y, z, 0, 0.02, 0);
         }
     }
 
-    public void determineFate(BlockState state, Level world, BlockPos pos, BlockState newState) {
+    public Rate determineFate(BlockState state, Level world, BlockPos pos, BlockState newState) {
         LogUtils.getLogger().info("BLOCK >> {} | {}", state.getBlock(), mod_group_id);
         if (!world.isClientSide && state.getBlock().getClass().getName().equals(mod_group_id.concat(".BlockOfFate_Block"))) {
-            // block.blockoffate.bof_generic
-            LogUtils.getLogger().info("Yes");
+            rObj = Fate.determine(null);
+            LogUtils.getLogger().info("Fate is pondering... > {}", rObj);
+            return rObj;
         }
+        return rObj;
     }
+
+//    public static GenItem selectItem(JSONObject itemRarity, List<GenItem> itemList, Map<String, Boolean> keyEvents) {
+//        GenItem selectedItem = null;
+//        Random gi_rand = new Random();
+//
+//        // Calculate total weight
+//        int totalWeight = 0;
+//        for (String key : itemRarity.keySet()) {
+//            System.out.println("KEY > " + itemRarity.get(key));
+//            totalWeight += itemRarity.get(key).getInt("weight");
+//        }
+//
+//        // Weighted random selection
+//        int wp = gi_rand.nextInt(totalWeight) + 1;
+//        int rar = 0;
+//        for (String key : itemRarity.keySet()) {
+//            int weight = itemRarity.getJSONObject(key).getInt("weight");
+//            if (wp <= weight) break;
+//            rar++;
+//            wp -= weight;
+//        }
+//
+//        // Do-while equivalent
+//        do {
+//            List<GenItem> filteredItems = new ArrayList<>();
+//            String targetType = new ArrayList<>(itemRarity.values()).get(rar).getString("type");
+//
+//            for (GenItem i : itemList) {
+//                if (i.getRarityType().equals(targetType)) {
+//                    filteredItems.add(i);
+//                }
+//            }
+//
+//            if (filteredItems.isEmpty()) continue;
+//
+//            selectedItem = filteredItems.get(gi_rand.nextInt(filteredItems.size()));
+//
+//            boolean allConditionsMet = true;
+//            for (Map<String, Boolean> event : selectedItem.getRequiredKeyEvents()) {
+//                for (Map.Entry<String, Boolean> entry : event.entrySet()) {
+//                    if (!keyEvents.getOrDefault(entry.getKey(), false).equals(entry.getValue())) {
+//                        System.out.println("A parameter of [" + selectedItem.getName() + "] is not fulfilled.");
+//                        allConditionsMet = false;
+//                        break;
+//                    }
+//                }
+//                if (!allConditionsMet) break;
+//            }
+//
+//            if (allConditionsMet) {
+//                System.out.println("[SUCCESS] -> " + selectedItem.getName());
+//                break;
+//            }
+//        } while (true);
+//
+//        return selectedItem;
+//    }
 
 }

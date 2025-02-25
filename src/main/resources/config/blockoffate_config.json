@@ -1,0 +1,40 @@
+{
+  "rates": [
+    {
+      "tier": "F", "particleType": "poof",
+      "type": "Junk", "abbv":"JUNK", "color": "gray", "weight":2000
+    },
+    {
+      "tier": "D", "particleType": "poof",
+      "type": "Common", "abbv":"CM", "color": "white", "weight":5000
+    },
+    {
+      "tier": "C", "particleType": "sneeze",
+      "type": "Uncommon", "abbv":"U", "color": "green", "weight":3000
+    },
+    {
+      "tier": "B", "particleType": "end_rod",
+      "type": "Rare", "abbv":"R", "color": "aqua", "weight":1500
+    },
+    {
+      "tier": "A", "particleType": "dragon_breath",
+      "type": "Epic", "abbv":"E", "color": "light_purple", "weight":750
+    },
+    {
+      "tier": "S", "particleType": "CHERRY_LEAVES",
+      "type": "Legendary", "abbv":"L", "color": "gold", "weight":250
+    },
+    {
+      "tier": "SS", "particleType": "dust",
+      "type": "Exotic", "abbv":"EX", "color": "red", "weight":50
+    },
+    {
+      "tier": "SSS", "particleType": "electric_spark",
+      "type": "Godlike", "abbv":"GDLK", "color": "yellow", "weight":10
+    },
+    {
+      "tier": "CURSE", "particleType": "raid_omen",
+      "type": "Cursed", "abbv":"CRSD", "color": "dark_red", "weight":750
+    }
+  ]
+}
