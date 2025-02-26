@@ -40,30 +40,24 @@
   "fates": [
     {
       "tier": "F",
-      "pools":
-      [
-
+      "pools": [
         {
-          "rolls": 1,
           "entries": [
             {
-              "functionType": "giveItem",
-              "type": "minecraft:item",
-              "name": "minecraft:stick"
+              "functionType": "giveItem", "weight": 100, "rolls": 1,
+              "pool": [
+                { "name": "minecraft:stick", "max": 3 },
+                { "name": "minecraft:string", "max": 3 },
+                { "name": "minecraft:iron_nugget", "max": 3 }
+              ]
             },
             {
-              "functionType": "giveItem",
-              "type": "minecraft:item",
-              "name": "minecraft:string",
-              "functions": [
-                {
-                  "function": "minecraft:set_count",
-                  "count": {
-                    "min": 1,
-                    "max": 3
-                  }
-                }
-              ]
+              "functionType": "custom", "customFuncID": "slippery_hands",
+              "description": "You should really stop eating slippery substances with your hands."
+            },
+            {
+              "functionType": "dummy", "customFuncID": "dummy",
+              "description": ""
             }
           ]
         }
@@ -71,30 +65,28 @@
     },
     {
       "tier": "D",
-      "pools":
-      [
-
+      "pools": [
         {
-          "rolls": 1,
           "entries": [
             {
-              "functionType": "giveItem",
-              "type": "minecraft:item",
-              "name": "minecraft:glow_berries"
+              "functionType": "giveItem", "weight": 100, "rolls": 1,
+              "pool": [
+                { "name": "minecraft:glow_berries", "max": 3 },
+                { "name": "minecraft:sweet_berries", "max": 3 },
+                { "name": "minecraft:pumpkin_seeds", "max": 3 }
+              ]
             },
             {
-              "functionType": "giveItem",
-              "type": "minecraft:item",
-              "name": "minecraft:sweet_berries",
-              "functions": [
-                {
-                  "function": "minecraft:set_count",
-                  "count": {
-                    "min": 1,
-                    "max": 3
-                  }
-                }
-              ]
+              "functionType": "custom", "customFuncID": "death_by_anvil",
+              "description": ""
+            },
+            {
+              "functionType": "custom", "customFuncID": "slippery_hands",
+              "description": "You should really stop eating slippery substances with your hands."
+            },
+            {
+              "functionType": "custom", "customFuncID": "fake_death_by_anvil",
+              "description": "Sike!"
             }
           ]
         }
@@ -102,30 +94,20 @@
     },
     {
       "tier": "C",
-      "pools":
-      [
-
+      "pools": [
         {
-          "rolls": 1,
           "entries": [
             {
-              "functionType": "giveItem",
-              "type": "minecraft:item",
-              "name": "minecraft:iron_ingot"
+              "functionType": "giveItem", "weight": 100, "rolls": 1,
+              "pool": [
+                { "name": "minecraft:iron_ingot", "max": 4 },
+                { "name": "minecraft:gold_ingot", "max": 4 },
+                { "name": "minecraft:spyglass" }
+              ]
             },
             {
-              "functionType": "giveItem",
-              "type": "minecraft:item",
-              "name": "minecraft:iron_nugget",
-              "functions": [
-                {
-                  "function": "minecraft:set_count",
-                  "count": {
-                    "min": 1,
-                    "max": 3
-                  }
-                }
-              ]
+              "functionType": "custom", "customFuncID": "dummy",
+              "description": ""
             }
           ]
         }
@@ -133,30 +115,19 @@
     },
     {
       "tier": "B",
-      "pools":
-      [
-
+      "pools": [
         {
-          "rolls": 1,
           "entries": [
             {
-              "functionType": "giveItem",
-              "type": "minecraft:item",
-              "name": "minecraft:clay"
+              "functionType": "giveItem", "weight": 100, "rolls": 1,
+              "pool": [
+                { "name": "minecraft:bow" },
+                { "name": "minecraft:arrow", "min":  8, "max": 16 }
+              ]
             },
             {
-              "functionType": "giveItem",
-              "type": "minecraft:item",
-              "name": "minecraft:brick",
-              "functions": [
-                {
-                  "function": "minecraft:set_count",
-                  "count": {
-                    "min": 1,
-                    "max": 3
-                  }
-                }
-              ]
+              "functionType": "custom", "customFuncID": "dummy",
+              "description": ""
             }
           ]
         }
@@ -164,30 +135,19 @@
     },
     {
       "tier": "A",
-      "pools":
-      [
-
+      "pools": [
         {
-          "rolls": 1,
           "entries": [
             {
-              "functionType": "giveItem",
-              "type": "minecraft:item",
-              "name": "minecraft:emerald_block"
+              "functionType": "giveItem", "weight": 100, "rolls": 1,
+              "pool": [
+                { "name": "minecraft:emerald", "max": 6 },
+                { "name": "minecraft:emerald_block" }
+              ]
             },
             {
-              "functionType": "giveItem",
-              "type": "minecraft:item",
-              "name": "minecraft:emerald",
-              "functions": [
-                {
-                  "function": "minecraft:set_count",
-                  "count": {
-                    "min": 1,
-                    "max": 3
-                  }
-                }
-              ]
+              "functionType": "custom", "customFuncID": "dummy",
+              "description": ""
             }
           ]
         }
@@ -195,11 +155,8 @@
     },
     {
       "tier": "CURSE",
-      "pools":
-      [
-
+      "pools": [
         {
-          "rolls": 1,
           "entries": [
             {
               "functionType": "custom",
@@ -207,22 +164,10 @@
               "description": "Slow X effect is applied and an ANVIL will dome the player."
             },
             {
-              "functionType": "giveItem",
-              "type": "minecraft:item",
-              "name": "minecraft:tnt"
-            },
-            {
-              "functionType": "giveItem",
-              "type": "minecraft:item",
-              "name": "minecraft:coal",
-              "functions": [
-                {
-                  "function": "minecraft:set_count",
-                  "count": {
-                    "min": 1,
-                    "max": 3
-                  }
-                }
+              "functionType": "giveItem", "weight": 100, "rolls": 1,
+              "pool": [
+                { "name": "minecraft:tnt" },
+                { "name": "minecraft:coal" }
               ]
             }
           ]
@@ -231,30 +176,21 @@
     },
     {
       "tier": "S",
-      "pools":
-      [
-
+      "pools": [
         {
-          "rolls": 1,
           "entries": [
             {
-              "functionType": "giveItem",
-              "type": "minecraft:item",
-              "name": "minecraft:snowball"
+              "functionType": "giveItem", "weight": 100, "rolls": 1,
+              "pool": [
+                { "name": "minecraft:diamond_axe" },
+                { "name": "minecraft:diamond_sword" },
+                { "name": "minecraft:diamond_pickaxe" },
+                { "name": "minecraft:diamond_shovel" }
+              ]
             },
             {
-              "functionType": "giveItem",
-              "type": "minecraft:item",
-              "name": "minecraft:melon",
-              "functions": [
-                {
-                  "function": "minecraft:set_count",
-                  "count": {
-                    "min": 1,
-                    "max": 3
-                  }
-                }
-              ]
+              "functionType": "custom", "customFuncID": "dummy",
+              "description": ""
             }
           ]
         }
@@ -262,30 +198,19 @@
     },
     {
       "tier": "SS",
-      "pools":
-      [
-
+      "pools": [
         {
-          "rolls": 1,
           "entries": [
             {
-              "functionType": "giveItem",
-              "type": "minecraft:item",
-              "name": "minecraft:nether_star"
+              "functionType": "giveItem", "weight": 100, "rolls": 1,
+              "pool": [
+                { "name": "minecraft:nether_star" },
+                { "name": "minecraft:beacon" }
+              ]
             },
             {
-              "functionType": "giveItem",
-              "type": "minecraft:item",
-              "name": "minecraft:beacon",
-              "functions": [
-                {
-                  "function": "minecraft:set_count",
-                  "count": {
-                    "min": 1,
-                    "max": 3
-                  }
-                }
-              ]
+              "functionType": "custom", "customFuncID": "dummy",
+              "description": ""
             }
           ]
         }
@@ -293,30 +218,22 @@
     },
     {
       "tier": "SSS",
-      "pools":
-      [
-
+      "pools": [
         {
-          "rolls": 1,
           "entries": [
             {
-              "functionType": "giveItem",
-              "type": "minecraft:item",
-              "name": "minecraft:netherite_chestplate"
+              "functionType": "giveItem", "weight": 100, "rolls": 1,
+              "pool": [
+                { "name": "minecraft:netherite_helmet" },
+                { "name": "minecraft:netherite_chestplate" },
+                { "name": "minecraft:netherite_leggings" },
+                { "name": "minecraft:netherite_boots" },
+                { "name": "minecraft:totem_of_undying" }
+              ]
             },
             {
-              "functionType": "giveItem",
-              "type": "minecraft:item",
-              "name": "minecraft:totem_of_undying",
-              "functions": [
-                {
-                  "function": "minecraft:set_count",
-                  "count": {
-                    "min": 1,
-                    "max": 3
-                  }
-                }
-              ]
+              "functionType": "custom", "customFuncID": "dummy",
+              "description": ""
             }
           ]
         }
