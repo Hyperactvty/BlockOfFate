@@ -1,3 +1,11 @@
 {
-  "item.blockoffate.bof_generic": "Block of Fate"
+  "itemGroup.blockoffate.furniture": "Block of Fate",
+  "block.blockoffate.acacia_herringbone_planks": "Acacia Herringbone Planks",
+
+  "stat.blockoffate.blocks_opened": "Fates Decided",
+
+  "subtitles.blockoffate.cursed_fate": "Cursed Fate",
+
+  "item.blockoffate.bof_generic": "Block of Fate",
+  "item.blockoffate.bof_lucky_ham": "§6Lucky Ham"
 }

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "blockoffate:block/bof_generic"
+    }
+  }
+}
