@@ -3,12 +3,16 @@ package com.hyperactvty.blockoffate.utilities;
 import com.hyperactvty.blockoffate.MainMod;
 import com.hyperactvty.blockoffate.records.Rate;
 import com.hyperactvty.blockoffate.registry.CustomFateRegistry;
+import com.hyperactvty.blockoffate.registry.Statistics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,16 +32,23 @@ public class FateExecution {
 
         List<JSONObject> filteredPools = new ArrayList<>();
 
-        for (int i = 0; i < pool.length(); i++) {
-            System.err.println(pool.getJSONObject(i).get("tier") + " == " + rate.tier() );
-            // If the `POOL` tier doesn't match the `TIER`, continues...
-            if(!pool.getJSONObject(i).get("tier").equals(rate.tier())) continue;
-            JSONObject jsonObject = pool.getJSONObject(i);
-//            System.out.println("Keys in item " + (i + 1) + ": " + jsonObject.keySet());
-            System.out.println("Pool Items > " + jsonObject.get("pools"));
-            pool = (JSONArray) jsonObject.get("pools");
-            ExecuteFunctionality(pool, rate, world, pos);
-            break;
+        try {
+            for (int i = 0; i < pool.length(); i++) {
+                System.err.println(pool.getJSONObject(i).get("tier") + " == " + rate.tier());
+                // If the `POOL` tier doesn't match the `TIER`, continues...
+                if (!pool.getJSONObject(i).get("tier").equals(rate.tier())) continue;
+                JSONObject jsonObject = pool.getJSONObject(i);
+                //            System.out.println("Keys in item " + (i + 1) + ": " + jsonObject.keySet());
+                System.out.println("Pool Items > " + jsonObject.get("pools"));
+                pool = (JSONArray) jsonObject.get("pools");
+                ExecuteFunctionality(pool, rate, world, pos);
+                break;
+            }
+
+            Utils.incrementStat(player, Statistics.BLOCKS_OPENED);
+        } catch (Exception e) {
+            System.err.println("Error in [FateExecution] > "+e);
+//            throw new RuntimeException(e);
         }
     }
 
@@ -83,5 +94,26 @@ public class FateExecution {
                 // Just kill the player
                 break;
         }
+
+        // Checks to see if there is a title
+        String displayTitle = "I HAVE SUFFERED A GREEEVIOUS WOUND!";
+        try {
+            displayTitle = fateDetermined.getJSONArray("title").toList().get(rand.nextInt(fateDetermined.getJSONArray("title").length())).toString();
+        } catch (Exception e) {
+//            throw new RuntimeException(e);
+        }
+
+        System.err.println("Maybe? "+TextColor.parseColor(rate.color()));
+        Utils.displayTitle(player, TextColor.parseColor(rate.color()).getOrThrow(),displayTitle); // Example white title
+        Utils.incrementStat(player, rate.tier());
+
     }
+
+    //    @Override
+//    public InteractionResult useOn(UseOnContext context) {
+//        if (!context.getLevel().isClientSide) {
+//            Utils.incrementStat(context.getPlayer(), Statistics.BLOCKS_OPENED);
+//        }
+//        return InteractionResult.SUCCESS;
+//    }
 }

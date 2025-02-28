@@ -1,8 +1,10 @@
 package com.hyperactvty.blockoffate.blocks;
 
+import com.hyperactvty.blockoffate.registry.Statistics;
 import com.hyperactvty.blockoffate.utilities.Fate;
 import com.hyperactvty.blockoffate.utilities.FateExecution;
 import com.hyperactvty.blockoffate.records.Rate;
+import com.hyperactvty.blockoffate.utilities.Utils;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
@@ -10,7 +12,9 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -28,7 +32,6 @@ public class BlockOfFate_Block extends Block { //BoF_Generic_BLOCK
 
 //    public List<RegistryObject<Item>> FATE_BLOCKS = new ArrayList<>();
 
-
     @Override
     public BlockState playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
         super.playerWillDestroy(world, pos, state, player);
@@ -41,7 +44,6 @@ public class BlockOfFate_Block extends Block { //BoF_Generic_BLOCK
             // Play a custom sound
             world.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.BLOCKS, 1.0F, 1.0F);
 
-            System.out.println("Displaying Particle > "+rObj.particleType()!= null ? (ParticleOptions) rObj.particleType() : ParticleTypes.SPIT);
             serverWorld.sendParticles(rObj.particleType()!= null ? (ParticleOptions) rObj.particleType() : ParticleTypes.SPIT,
                     pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
                     20, 0.5, 0.5, 0.5, 0.02);

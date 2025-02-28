@@ -2,11 +2,18 @@ package com.hyperactvty.blockoffate.registry;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.Stats;
 
+import static com.hyperactvty.blockoffate.registry.Statistics.BOF_STAT_GROUP;
+
 public class StatisticsRegistry {
     public static void registerStatistics() {
+//        Registry.register(BuiltInRegistries.STAT_TYPE, /*new ResourceLocation*/("blockoffate:custom_tab"), BOF_STAT_GROUP);
+        Registry.register(BuiltInRegistries.STAT_TYPE, /*new ResourceLocation*/("custom_tab"), BOF_STAT_GROUP);
+//        Registry.register(BuiltInRegistries.STAT_TYPE, new ResourceLocation("blockoffate:custom_tab"), BOF_STAT_GROUP);
+
         Registry.register(BuiltInRegistries.CUSTOM_STAT, "blocks_opened", Statistics.BLOCKS_OPENED);
         Stats.CUSTOM.get(Statistics.BLOCKS_OPENED, StatFormatter.DEFAULT);
 

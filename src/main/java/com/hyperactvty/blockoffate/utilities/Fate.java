@@ -83,7 +83,6 @@ public class Fate {
             wp -= weight;
         }
 
-        System.out.println("Chosen > "+rObjects.get(rar).tier());
         return rObjects.get(rar);
     }
 }
