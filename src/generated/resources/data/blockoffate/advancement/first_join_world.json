@@ -1,0 +1,34 @@
+{
+  "criteria": {
+    "first_join_world": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "display": {
+    "background": "minecraft:textures/block/crying_obsidian",
+    "description": {
+      "translate": "advancement.blockoffate.first_join_world.desc"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "blockoffate:bof_lucky_ham"
+    },
+    "title": {
+      "translate": "advancement.blockoffate.first_join_world.title"
+    }
+  },
+  "requirements": [
+    [
+      "first_join_world"
+    ]
+  ],
+  "rewards": {
+    "experience": 250,
+    "loot": [
+      "minecraft:chests/end_city_treasure",
+      "blockoffate:loot_tables/advancements/first_join_world"
+    ]
+  },
+  "sends_telemetry_event": true
+}
