@@ -1,0 +1,34 @@
+{
+  "criteria": {
+    "first_join_world": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "display": {
+    "background": "minecraft:crying_obsidian",
+    "description": {
+      "translate": "advancement.blockoffate.first_join_world.desc"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "count": 1,
+      "id": "blockoffate:bof_lucky_ham"
+    },
+    "title": {
+      "translate": "advancement.blockoffate.first_join_world.title"
+    }
+  },
+  "requirements": [
+    [
+      "first_join_world"
+    ]
+  ],
+  "rewards": {
+    "experience": 100,
+    "loot": [
+      "minecraft:diamond_sword", "blockoffate:generic"
+    ]
+  },
+  "sends_telemetry_event": true
+}
