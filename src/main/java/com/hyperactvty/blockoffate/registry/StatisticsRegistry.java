@@ -35,5 +35,8 @@ public class StatisticsRegistry {
         Stats.CUSTOM.get(Statistics.FATES_SS, StatFormatter.DEFAULT);
         Registry.register(BuiltInRegistries.CUSTOM_STAT, "fates_sss", Statistics.FATES_SSS);
         Stats.CUSTOM.get(Statistics.FATES_SSS, StatFormatter.DEFAULT);
+
+        Registry.register(BuiltInRegistries.CUSTOM_STAT, "player_luck", Statistics.PLAYER_LUCK);
+        Stats.CUSTOM.get(Statistics.PLAYER_LUCK, StatFormatter.DEFAULT);
     }
 }

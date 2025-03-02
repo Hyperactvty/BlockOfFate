@@ -18,11 +18,11 @@ public class Fate {
         this.rates = _rates;
     }
 
-    public JSONArray getRates() {
-        return rates;
-    }
+    public JSONArray getRates() { return rates; }
 
-    public static void onStartUp() {
+    public void setRates(JSONArray rates) { Fate.rates = rates; }
+
+    public void onStartUp() {
         for (int i = 0; i < rates.length(); i++) {
             JSONObject jsonObject = rates.getJSONObject(i);
             Rate _rO = new Rate(null, null, null, 0, null, null);

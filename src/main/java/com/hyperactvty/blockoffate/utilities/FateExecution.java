@@ -3,6 +3,7 @@ package com.hyperactvty.blockoffate.utilities;
 import com.hyperactvty.blockoffate.MainMod;
 import com.hyperactvty.blockoffate.records.Rate;
 import com.hyperactvty.blockoffate.registry.CustomFateRegistry;
+import com.hyperactvty.blockoffate.registry.PlayerRegistry;
 import com.hyperactvty.blockoffate.registry.Statistics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -14,6 +15,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.LootPool;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -29,6 +31,10 @@ public class FateExecution {
         System.out.println("Inside FateExecution.java...");
         JSONArray pool = MainMod.fatePools;
         player = _player;
+        // Get the player's `luck` stat
+        float playerLuck = 0.0f;
+        PlayerRegistry.checkPlayerLuck(player);
+        Utils.incrementStat(player, "player_luck", 1);
 
         List<JSONObject> filteredPools = new ArrayList<>();
 
@@ -86,6 +92,28 @@ public class FateExecution {
                     System.err.println("Invalid item ID: " + itemId);
                 }
                 break;
+            case "loot_table":
+                JSONArray lootPoolJSON = fateDetermined.getJSONArray("pool");
+                JSONObject lootPoolResult = lootPoolJSON.getJSONObject(rand.nextInt(lootPoolJSON.length()));
+                System.out.println("Pool Result > "+lootPoolResult);
+
+                String lootPoolId = lootPoolResult.getString("name");
+                System.err.println("Loot Pool Result > "+BuiltInRegistries.LOOT_POOL_ENTRY_TYPE.getValue(ResourceLocation.parse(lootPoolId)));
+//                LootPool lootPool = BuiltInRegistries.LOOT_POOL_ENTRY_TYPE.getValue(ResourceLocation.parse(lootPoolId)); // Convert String to Minecraft Item
+//                LootPool lootPool = BuiltInRegistries.LOOT_POOL_ENTRY_TYPE.getValue(ResourceLocation.parse(lootPoolId)); // Convert String to Minecraft Loot Pool
+//
+//
+//                if (lootPool != null) {
+//
+//                    assert player != null;
+//                    if (!player.getInventory().add(new ItemStack(lootPool))) {
+//                        player.drop(new ItemStack(lootPool), false); // If inventory is full, drop the item at the player's position
+//                    }
+//                    System.out.println("Dropped item: " + lootPoolId);
+//                } else {
+//                    System.err.println("Invalid item ID: " + lootPoolId);
+//                }
+                break;
             case "custom":
 //                CustomFateRegistry.fateList.getOrDefault(fateDetermined, null);
                 CustomFateRegistry.executeCommand(fateDetermined, world, pos);
@@ -103,7 +131,6 @@ public class FateExecution {
 //            throw new RuntimeException(e);
         }
 
-        System.err.println("Maybe? "+TextColor.parseColor(rate.color()));
         Utils.displayTitle(player, TextColor.parseColor(rate.color()).getOrThrow(),displayTitle); // Example white title
         Utils.incrementStat(player, rate.tier());
 

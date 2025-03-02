@@ -8,7 +8,7 @@ import net.minecraft.stats.StatType;
 
 public class Statistics {
 //    public static final StatType<ResourceLocation> BOF_STAT_GROUP = new StatType<>(BuiltInRegistries.CUSTOM_STAT, StatFormatter.DEFAULT);
-public static final StatType<ResourceLocation> BOF_STAT_GROUP = new StatType<>(BuiltInRegistries.CUSTOM_STAT, null);
+    public static final StatType<ResourceLocation> BOF_STAT_GROUP = new StatType<>(BuiltInRegistries.CUSTOM_STAT, null);
 //    public static final StatType<ResourceLocation> BOF_STAT_GROUP = new StatType<>(BuiltInRegistries.CUSTOM_STAT, null);
 //    ResourceLocation.fromNamespaceAndPath("blockoffate", "custom_group")
     public static final ResourceLocation BLOCKS_OPENED = ResourceLocation.fromNamespaceAndPath("blockoffate", "blocks_opened");
@@ -21,4 +21,6 @@ public static final StatType<ResourceLocation> BOF_STAT_GROUP = new StatType<>(B
     public static final ResourceLocation FATES_S = ResourceLocation.fromNamespaceAndPath("blockoffate", "fates_s");
     public static final ResourceLocation FATES_SS = ResourceLocation.fromNamespaceAndPath("blockoffate", "fates_ss");
     public static final ResourceLocation FATES_SSS = ResourceLocation.fromNamespaceAndPath("blockoffate", "fates_sss");
+
+    public static final ResourceLocation PLAYER_LUCK = ResourceLocation.fromNamespaceAndPath("blockoffate", "player_luck");
 }

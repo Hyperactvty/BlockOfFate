@@ -1,12 +1,22 @@
 package com.hyperactvty.blockoffate;
 
 import com.hyperactvty.blockoffate.blocks.BlockOfFate_Block;
+import com.hyperactvty.blockoffate.registry.Advancements;
 import com.hyperactvty.blockoffate.registry.CustomFateRegistry;
 import com.hyperactvty.blockoffate.utilities.Fate;
 import com.mojang.logging.LogUtils;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
@@ -16,7 +26,10 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -34,6 +47,9 @@ import org.slf4j.Logger;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(MainMod.MODID)
@@ -51,8 +67,13 @@ public class MainMod {
 
     public static Fate fateObject;
     public static JSONObject cfg;
+    public JSONObject custom_dropsArray;
+    public static JSONObject userBOF_Config;
     public static JSONArray fatePools = new JSONArray();
     public static JSONArray rates = new JSONArray();
+
+    private static final SetupCheck setupCheck = new SetupCheck();
+
 
     /**
      *  DEVELOPMENT CODE
@@ -169,19 +190,98 @@ public class MainMod {
             // Print the entire JSON object
             System.out.println(jsonObject.toString(4)); // Pretty print with indentation
 
+            setupCheck.setPrimaryConfigLoaded(true);
+            System.err.println("Loaded the default config.");
+
+            return new JSONObject(content);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new JSONObject();
+        }
+    }
+
+    public static JSONObject loadDefaultDrops() {
+        try {
+            String configPath = "./config/blockoffate_loot_pools.json";
+            String content = new String(Files.readAllBytes(Paths.get(configPath)));
+
+            // Convert string to JSONObject
+            JSONObject jsonObject = new JSONObject(content);
+
+            // Print the entire JSON object
+            System.out.println(jsonObject.toString(4)); // Pretty print with indentation
+
             // Access specific fields
             rates = (JSONArray) jsonObject.get("rates");
-            fatePools = (JSONArray) jsonObject.get("fates");
-
-            System.out.println("PRE-RATES >"+rates.toList());
-            System.out.println("PRE-POOLS > "+fatePools.toList());
-
-
             fateObject = new Fate(rates);
-            System.out.println(fatePools.length()+" pools loaded.");
-            Fate.onStartUp(); // OR fateObject.onStartUp();
+            fatePools = (JSONArray) jsonObject.get("fates");
+            if(cfg.getBoolean("disableCurse")) {
+                System.err.println("\tRemoving Tier `Cursed` from pools");
+                List<JSONObject> filteredList = fateObject.getRates().toList().stream()
+                        .map(obj -> new JSONObject((java.util.Map<?, ?>) obj)) // Converts Map to JSONObject
+                        .filter(json -> !json.optString("tier").equals("CURSE")) // Removes objects with "tier": "CURSE"
+                        .collect(Collectors.toList());
+
+                fateObject.setRates(new JSONArray(filteredList));
+//                fateObject.setRates(fateObject.getRates().remove(fateObject.getRates()));
+            }
+
+            setupCheck.setDefaultDropsLoaded(true);
+//            System.out.println(fatePools.length()+" pools loaded.");
+            System.err.println("Loaded the default drops.");
+            fateObject.onStartUp(); // OR fateObject.onStartUp();
 
 //            CustomFateRegistry.generateFateList();
+
+            return new JSONObject(content);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new JSONObject();
+        }
+    }
+
+    public static JSONObject checkLoadCustomConfig() {
+        try {
+            String configPath = "./bof_config.json";
+            String content = new String(Files.readAllBytes(Paths.get(configPath)));
+
+            // Convert string to JSONObject
+            JSONObject jsonObject = new JSONObject(content);
+
+            System.out.println("===== LOAD CUSTOM CONFIG =====");
+            // Print the entire JSON object
+            System.out.println(jsonObject.toString(4)); // Pretty print with indentation
+
+//            CustomFateRegistry.generateFateList();
+
+            setupCheck.setCustomConfigLoaded(true);
+            System.err.println("Loaded the user's custom config.");
+
+            return new JSONObject(content);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new JSONObject();
+        }
+    }
+
+    public static JSONObject checkLoadCustomDrops() {
+        try {
+            String configPath = "./custom_drops.json";
+            String content = new String(Files.readAllBytes(Paths.get(configPath)));
+
+            // Convert string to JSONObject
+            JSONObject jsonObject = new JSONObject(content);
+
+            System.out.println("===== LOAD CUSTOM DROPS =====");
+            // Print the entire JSON object
+            System.out.println(jsonObject.toString(4)); // Pretty print with indentation
+
+//            CustomFateRegistry.generateFateList();
+            fatePools.putAll(jsonObject.get("custom_drops"));
+
+            setupCheck.setCustomDropsLoaded(true);
+            System.err.println("Loaded the user's custom drops.");
+
 
             return new JSONObject(content);
         } catch (Exception e) {
@@ -197,10 +297,23 @@ public class MainMod {
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-        // Do something when the server starts
-        LOGGER.info("HELLO from server starting");
-        cfg = loadConfig();
-        onWorldLoad(null);
+        try {
+            cfg = loadConfig();
+            loadDefaultDrops();
+            // Check to see if there is a .txt or a .json file named `custom_drops` for user-added drops for a modpack
+            custom_dropsArray = checkLoadCustomDrops();
+            // Loads the config for the user to modify if they deem so.
+            userBOF_Config = checkLoadCustomConfig();
+
+
+            if (setupCheck.setupComplete() == false) {
+                throw new LoadsIncomplete();
+            }
+            onWorldLoad(null);
+        } catch (Exception e) {
+            System.err.println("ERROR IN [onServerStarting] > "+e);
+            throw new RuntimeException(e);
+        }
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
@@ -213,7 +326,115 @@ public class MainMod {
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
         }
 
+//        @SubscribeEvent
+//        public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+////            ServerPlayer player = (ServerPlayer) event.getPlayer();
+//            if (event.getEntity() instanceof ServerPlayer player) { // Ensure it's a ServerPlayer
+////                event.getEntity().awardStat(ResourceLocation.parse(MODID+":first_join_world"));
+//                // Check if the player has already entered a world (i.e., check if it's their first time)
+////                if (!player.getStats().hasStat(MODID+":first_join_world")) {
+////                    // You can now trigger your advancement logic here
+////                    player.awardAdvancement(AdvancementRewards.FIRST_ENTRY);
+//////                    event.getEntity().awardStat(ResourceLocation.parse(MODID+":first_join_world"));
+////                }
+////                if (isNewPlayer(player)) {
+////                    player.sendSystemMessage(Component.literal("Welcome to the server for the first time!"));
+////                }
+//            }
+//
+//
+//        }
+
     }
+
+    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+    public static class PlayerJoinEventHandler {
+        @SubscribeEvent
+        public static void onPlayerJoin(net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent event) {
+            if (event.getEntity() instanceof ServerPlayer player) { // Ensure it's a ServerPlayer
+                if (isNewPlayer(player)) {
+                    player.sendSystemMessage(Component.literal("Welcome to the server for the first time!"));
+
+                    MinecraftServer server = player.server;
+                    AdvancementHolder serverAdvancement = server.getAdvancements().get(Advancements.FIRST_JOIN_WORLD);
+                    player.getAdvancements().award(serverAdvancement,"blockoffate:first_join_world");
+                    player.getAdvancements().save();
+                    System.err.println("serverAdvancement > " + serverAdvancement.value());
+                    System.err.println("Awarded > " + player.getAdvancements());
+                }
+            }
+        }
+
+        // TODO: Maybe have this in the other `Subscribe`
+        @SubscribeEvent
+        public static void onModInitialization(final FMLCommonSetupEvent event) {
+            // Register advancement provider
+            IEventBus modEventBus = MinecraftForge.EVENT_BUS;
+            modEventBus.register(AdvancementsProvider.class);
+        }
+
+        // #CHECKPOINT 0
+//        @SubscribeEvent
+//        public static void gatherData(GatherDataEvent event) {
+//            System.err.println("[MainMod.java] C: `gatherData`");
+//            DataGenerator generator = event.getGenerator();
+//            PackOutput output = generator.getPackOutput();
+//            ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
+//            CompletableFuture<HolderLookup.Provider> registries = event.getLookupProvider();
+//
+//            // Add our custom advancements provider
+//            generator.addProvider(event.includeServer(), new AdvancementsProvider(output, registries, existingFileHelper));
+//        }
+
+        private static boolean isNewPlayer(ServerPlayer player) {
+            MinecraftServer server = player.server;
+
+//            Advancement advancement = player.getAdvancements().getOrStartProgress(ResourceLocation.fromNamespaceAndPath("minecraft:story/root", "/"));
+
+//            ResourceLocation storyRoot = ResourceLocation.parse("blockoffate:first_join_world"); // Correct way to create ResourceLocation
+//            ResourceLocation storyRoot = ResourceLocation.parse("minecraft:story/root"); // Correct way to create ResourceLocation
+
+//            Advancement advancement = player.getAdvancements().getOrStartProgress(new AdvancementHolder(storyRoot,storyRoot));
+            AdvancementHolder serverAdvancement = server.getAdvancements().get(Advancements.FIRST_JOIN_WORLD);
+//            System.err.println("serverAdvancement progress > " + serverAdvancement);
+            if (serverAdvancement != null) {
+                AdvancementProgress progress = player.getAdvancements().getOrStartProgress(serverAdvancement);
+//                progress.grantProgress("blockoffate:first_join_world");
+//                System.err.println("Player progress > " + progress);
+//                System.err.println("Player > " + player.getName());
+//                player.getAdvancements().award(serverAdvancement,"blockoffate:first_join_world");
+//                player.getAdvancements().save();
+//                System.err.println("Awarded > " + player.getAdvancements());
+//                player.awardStat(Advancements.FIRST_JOIN_WORLD);
+//                player.awardStat(storyRoot);
+//                player.awardStat(ResourceLocation.parse(MODID+":first_join_world"));
+                return !progress.isDone(); // If they haven't completed "story/root", they are new
+            }
+
+
+//            if (advancement != null) {
+//                AdvancementProgress progress = player.getAdvancements().getOrStartProgress(advancement);
+//                System.err.println("Player Advancements > " + progress);
+//            } else {
+//                System.err.println("Advancement not found!");
+//            }
+
+
+//            System.err.println("storyRoot > "+storyRoot);
+
+            System.err.println("Player Advancements > "+player.getAdvancements());
+//            System.err.println("Player Advancements > "+player.getAdvancements().getOrStartProgress(new AdvancementHolder(new ResourceLocation("minecraft:story/root"))));
+//            Advancement advancement = server.getAdvancements().getAdvancement(new ResourceLocation("minecraft:story/root"));
+//
+//            if (advancement != null) {
+//                AdvancementProgress progress = player.getAdvancements().getOrStartProgress(advancement);
+//                return !progress.isDone(); // If they haven't completed "story/root", they are new
+//            }
+
+            return false; // Fallback in case advancement is missing
+        }
+    }
+
 }
 
 

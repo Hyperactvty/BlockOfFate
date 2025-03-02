@@ -11,8 +11,11 @@ import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
+import net.minecraft.stats.StatsCounter;
 import net.minecraft.world.entity.player.Player;
+import org.json.JSONObject;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -31,6 +34,7 @@ public class Utils {
         statList.put(/*"fates_s"*/"S", Statistics.FATES_S);
         statList.put(/*"fates_ss"*/"SS", Statistics.FATES_SS);
         statList.put(/*"fates_sss"*/"SSS", Statistics.FATES_SSS);
+        statList.put(/*"fates_sss"*/"player_luck", Statistics.PLAYER_LUCK);
     }
 
     public static void incrementStat(Player player, ResourceLocation stat) {
@@ -40,6 +44,36 @@ public class Utils {
     public static void incrementStat(Player player, String statName) {
         ResourceLocation stat = statList.get(statName);
         player.awardStat(Stats.CUSTOM.get(stat));
+    }
+
+    public static void incrementStat(Player player, String statName, int amount) {
+        ResourceLocation stat = statList.get(statName);
+//        StatsCounter statsManager = new StatsCounter();
+//        statsManager.increment(player, Stats.CUSTOM.get(stat), amount);
+//        float currentValue = statsManager.getValue(Stats.CUSTOM.get(stat));
+//        System.err.println("Player Luck > "+currentValue);
+//
+//
+//        if (currentValue > 0) { // Prevent negative stats
+//            statsManager.setValue(player, Stats.CUSTOM.get(stat), (int) (currentValue + amount));
+//        }
+        player.awardStat(Stats.CUSTOM.get(stat), amount);
+    }
+
+    public static void decrementStat(Player player, String statName, int amount) {
+        ResourceLocation stat = statList.get(statName);
+
+        StatsCounter statsManager = new StatsCounter();
+        statsManager.getValue(Stats.CUSTOM.get(stat));
+//        statsManager.increment(player, Stats.CUSTOM.get(stat), amount);
+//        float currentValue = statsManager.getValue(Stats.CUSTOM.get(stat));
+        if (player instanceof ServerPlayer serverPlayer) {
+            StatsCounter statsCounter = serverPlayer.getStats();
+            int amt = statsCounter.getValue(Stats.CUSTOM.get(stat));
+            System.err.println("Player Luck > "+amt);
+        }
+
+        player.awardStat(Stats.CUSTOM.get(stat), amount);
     }
 
     public static void displayTitle(Player player, TextColor color, String... titleText) {
@@ -70,5 +104,16 @@ public class Utils {
 ////        Component actionBarMessage = Component.translatable(titleText[0]);
 ////        Minecraft.getInstance().getConnection().send(new ClientboundSetActionBarTextPacket(actionBarMessage)); // 1, 20, 1 are in ticks
 //        Minecraft.getInstance().getConnection().send(new ClientboundSetActionBarTextPacket(Component.literal(titleText[0]))); // 1, 20, 1 are in ticks
+    }
+
+    public static void parseDropData(JSONObject data[]) {
+        System.err.println("parseDropData > "+data);
+        for (JSONObject datum : data) {
+            System.err.println("datum > "+datum);
+            switch (datum) {
+                default -> throw new IllegalStateException("Unexpected value: " + datum);
+            }
+        }
+        return;
     }
 }
