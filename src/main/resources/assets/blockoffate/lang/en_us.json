@@ -1,11 +1,22 @@
 {
   "itemGroup.blockoffate.furniture": "Block of Fate",
-  "block.blockoffate.acacia_herringbone_planks": "Acacia Herringbone Planks",
 
-  "stat.blockoffate.blocks_opened": "Fates Decided",
+  "stat.blockoffate.blocks_opened": "Block of Fate: Fates Decided",
+  "stat.blockoffate.fates_cursed": "Block of Fate: Cursed Fate Granted",
+  "stat.blockoffate.fates_f": "Block of Fate: \"F\" Fate Granted",
+  "stat.blockoffate.fates_d": "Block of Fate: \"D\" Fate Granted",
+  "stat.blockoffate.fates_c": "Block of Fate: \"C\" Fate Granted",
+  "stat.blockoffate.fates_b": "Block of Fate: \"B\" Fate Granted",
+  "stat.blockoffate.fates_a": "Block of Fate: \"A\" Fate Granted",
+  "stat.blockoffate.fates_s": "Block of Fate: \"S\" Fate Granted",
+  "stat.blockoffate.fates_ss": "Block of Fate: \"SS\" Fate Granted",
+  "stat.blockoffate.fates_sss": "Block of Fate: \"SSS\" Fate Granted",
+  "stat.blockoffate.player_luck": "Block of Fate: Player Luck",
 
   "subtitles.blockoffate.cursed_fate": "Cursed Fate",
 
   "item.blockoffate.bof_generic": "Block of Fate",
-  "item.blockoffate.bof_lucky_ham": "§6Lucky Ham"
+  "item.blockoffate.bof_lucky_ham": "§6Lucky Ham",
+  "advancement.blockoffate.first_join_world.title": "Welcome to Block of Fate!",
+  "advancement.blockoffate.first_join_world.desc": "Where will FATE lead you..."
 }

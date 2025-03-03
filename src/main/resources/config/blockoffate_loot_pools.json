@@ -1,0 +1,263 @@
+{
+  "rates": [
+    {
+      "tier": "D", "particleType": "GUST",
+      "type": "Common", "abbv":"CM", "color": "white", "weight":5000
+    },
+    {
+      "tier": "C", "particleType": "SNEEZE",
+      "type": "Uncommon", "abbv":"U", "color": "green", "weight":3000
+    },
+    {
+      "tier": "F", "particleType": "GUST",
+      "type": "Junk", "abbv":"JUNK", "color": "gray", "weight":2000
+    },
+    {
+      "tier": "B", "particleType": "END_ROD",
+      "type": "Rare", "abbv":"R", "color": "aqua", "weight":1500
+    },
+    {
+      "tier": "A", "particleType": "DRAGON_BREATH",
+      "type": "Epic", "abbv":"E", "color": "light_purple", "weight":750
+    },
+    {
+      "tier": "CURSE", "particleType": "RAID_OMEN",
+      "type": "Cursed", "abbv":"CRSD", "color": "dark_red", "weight":749
+    },
+    {
+      "tier": "S", "particleType": "CHERRY_LEAVES",
+      "type": "Legendary", "abbv":"L", "color": "gold", "weight":250
+    },
+    {
+      "tier": "SS", "particleType": "DUST",
+      "type": "Exotic", "abbv":"EX", "color": "red", "weight":50
+    },
+    {
+      "tier": "SSS", "particleType": "ELECTRIC_SPARK",
+      "type": "Godlike", "abbv":"GDLK", "color": "yellow", "weight":10
+    }
+  ],
+  "fates": [
+    {
+      "tier": "F",
+      "pools": [
+        {
+          "entries": [
+            {
+              "functionType": "giveItem", "weight": 100, "rolls": 1,
+              "title": ["junk.", "trash", "scraps"],
+              "pool": [
+                { "name": "minecraft:stick", "max": 3 },
+                { "name": "minecraft:string", "max": 3 },
+                { "name": "minecraft:iron_nugget", "max": 3 }
+              ]
+            },
+            {
+              "functionType": "custom", "customFuncID": "slippery_hands",
+              "title": ["Slippery Hands"],
+              "description": "You should really stop eating slippery substances with your hands."
+            },
+            {
+              "functionType": "dummy", "customFuncID": "dummy",
+              "title": ["Dummy"],
+              "description": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tier": "D",
+      "pools": [
+        {
+          "entries": [
+            {
+              "functionType": "giveItem", "weight": 100, "rolls": 1,
+              "title": ["D-Tier", "Common"],
+              "pool": [
+                { "name": "minecraft:glow_berries", "max": 3 },
+                { "name": "minecraft:sweet_berries", "max": 3 },
+                { "name": "minecraft:pumpkin_seeds", "max": 3 }
+              ]
+            },
+            {
+              "functionType": "custom", "customFuncID": "death_by_anvil",
+              "title": ["Something Wil. E. Coyote would do..."],
+              "description": "Dome'd"
+            },
+            {
+              "functionType": "custom", "customFuncID": "slippery_hands",
+              "title": ["Slippery Hands"],
+              "description": "You should really stop eating slippery substances with your hands."
+            },
+            {
+              "functionType": "custom", "customFuncID": "fake_death_by_anvil",
+              "title": ["Something Wil. E. Coyote would do..."],
+              "description": "Sike!"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tier": "C",
+      "pools": [
+        {
+          "entries": [
+            {
+              "functionType": "giveItem", "weight": 100, "rolls": 1,
+              "title": ["C-Tier", "Uncommon"],
+              "pool": [
+                { "name": "minecraft:iron_ingot", "max": 4 },
+                { "name": "minecraft:gold_ingot", "max": 4 },
+                { "name": "minecraft:spyglass" }
+              ]
+            },
+            {
+              "functionType": "custom", "customFuncID": "dummy",
+              "title": ["Dummy"],
+              "description": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tier": "B",
+      "pools": [
+        {
+          "entries": [
+            {
+              "functionType": "giveItem", "weight": 100, "rolls": 1,
+              "title": ["B-Tier","Rare"],
+              "pool": [
+                { "name": "minecraft:bow" },
+                { "name": "minecraft:arrow", "min":  8, "max": 16 }
+              ]
+            },
+            {
+              "functionType": "custom", "customFuncID": "dummy",
+              "title": ["Dummy"],
+              "description": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tier": "A",
+      "pools": [
+        {
+          "entries": [
+            {
+              "functionType": "giveItem", "weight": 100, "rolls": 1,
+              "title": ["A-Tier", "Epic"],
+              "pool": [
+                { "name": "minecraft:emerald", "max": 6 },
+                { "name": "minecraft:emerald_block" }
+              ]
+            },
+            {
+              "functionType": "custom", "customFuncID": "dummy",
+              "title": ["Dummy"],
+              "description": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tier": "CURSE",
+      "pools": [
+        {
+          "entries": [
+            {
+              "functionType": "custom", "customFuncID": "death_by_anvil",
+              "title": ["Something Wil. E. Coyote would do..."],
+              "description": "Slow X effect is applied and an ANVIL will dome the player."
+            },
+            {
+              "functionType": "giveItem", "weight": 100, "rolls": 1,
+              "title": ["CURSED"],
+              "pool": [
+                { "name": "minecraft:tnt" },
+                { "name": "minecraft:coal" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tier": "S",
+      "pools": [
+        {
+          "entries": [
+            {
+              "functionType": "giveItem", "weight": 100, "rolls": 1,
+              "title": ["S-Tier", "Legendary"],
+              "pool": [
+                { "name": "minecraft:diamond_axe" },
+                { "name": "minecraft:diamond_sword" },
+                { "name": "minecraft:diamond_pickaxe" },
+                { "name": "minecraft:diamond_shovel" }
+              ]
+            },
+            {
+              "functionType": "custom", "customFuncID": "dummy",
+              "title": ["Dummy"],
+              "description": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tier": "SS",
+      "pools": [
+        {
+          "entries": [
+            {
+              "functionType": "giveItem", "weight": 100, "rolls": 1,
+              "title": ["SS-Tier", "Exotic"],
+              "pool": [
+                { "name": "minecraft:nether_star" },
+                { "name": "minecraft:beacon" }
+              ]
+            },
+            {
+              "functionType": "custom", "customFuncID": "dummy",
+              "title": ["Dummy"],
+              "description": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tier": "SSS",
+      "pools": [
+        {
+          "entries": [
+            {
+              "functionType": "giveItem", "weight": 100, "rolls": 1,
+              "title": ["SSS-Tier", "God Tier"],
+              "pool": [
+                { "name": "minecraft:netherite_helmet" },
+                { "name": "minecraft:netherite_chestplate" },
+                { "name": "minecraft:netherite_leggings" },
+                { "name": "minecraft:netherite_boots" },
+                { "name": "minecraft:totem_of_undying" }
+              ]
+            },
+            {
+              "functionType": "custom", "customFuncID": "dummy",
+              "title": ["Dummy"],
+              "description": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

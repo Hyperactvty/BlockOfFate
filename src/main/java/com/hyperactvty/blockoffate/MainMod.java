@@ -3,6 +3,7 @@ package com.hyperactvty.blockoffate;
 import com.hyperactvty.blockoffate.blocks.BlockOfFate_Block;
 import com.hyperactvty.blockoffate.registry.Advancements;
 import com.hyperactvty.blockoffate.registry.CustomFateRegistry;
+import com.hyperactvty.blockoffate.registry.LootTables;
 import com.hyperactvty.blockoffate.utilities.Fate;
 import com.mojang.logging.LogUtils;
 import net.minecraft.advancements.Advancement;
@@ -24,11 +25,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -48,6 +51,7 @@ import org.slf4j.Logger;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -84,6 +88,8 @@ public class MainMod {
             () -> new BlockOfFate_Block(BlockBehaviour.Properties.of()
                     .setId(BLOCKS.key("bof_generic"))
                     .mapColor(MapColor.QUARTZ)
+                    .destroyTime(0.5f)
+                    .overrideLootTable(Optional.ofNullable(LootTables.FIRST_JOIN_WORLD1))
             )
     );
 
@@ -345,6 +351,16 @@ public class MainMod {
 //
 //        }
 
+    }
+
+    @SubscribeEvent
+    public void onLootTableLoad(LootTableLoadEvent event) {
+//        if (event.getName().equals(new ResourceLocation(MODID, "chests/my_custom_loot_table"))) {
+        if (event.getName().equals(ResourceLocation.fromNamespaceAndPath(MODID, "chests/first_join_world"))) {
+            LootTable table = event.getTable();
+            // Modify or add to the loot table here if needed
+            System.err.println("onLootTableLoad > "+table);
+        }
     }
 
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)

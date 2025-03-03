@@ -3,19 +3,26 @@ package com.hyperactvty.blockoffate.utilities;
 import com.hyperactvty.blockoffate.MainMod;
 import com.hyperactvty.blockoffate.records.Rate;
 import com.hyperactvty.blockoffate.registry.CustomFateRegistry;
+import com.hyperactvty.blockoffate.registry.LootTables;
 import com.hyperactvty.blockoffate.registry.PlayerRegistry;
 import com.hyperactvty.blockoffate.registry.Statistics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -96,8 +103,52 @@ public class FateExecution {
                 JSONArray lootPoolJSON = fateDetermined.getJSONArray("pool");
                 JSONObject lootPoolResult = lootPoolJSON.getJSONObject(rand.nextInt(lootPoolJSON.length()));
                 System.out.println("Pool Result > "+lootPoolResult);
+                for(Object lpi : fateDetermined.getJSONArray("pool").toList()) {
+                    System.out.println("\t lpi > "+lpi);
+                    LootTable.lootTable();
+                }
 
                 String lootPoolId = lootPoolResult.getString("name");
+                System.err.println("Parse > "+lootPoolId+" | "+ResourceLocation.parse(lootPoolId));
+
+                if (!world.isClientSide && world instanceof ServerLevel server) {
+                    System.err.println("LT > "+ LootTables.FIRST_JOIN_WORLD1.toString());
+                    System.err.println("LT > "+ LootTables.FIRST_JOIN_WORLD1.registryKey());
+                    System.err.println("LT > "+ LootTables.FIRST_JOIN_WORLD1.registry());
+                    System.err.println("LT > "+ LootTables.FIRST_JOIN_WORLD1.location());
+                    // Get the LootTableManager
+//                    lootTableManager = server.getServer().getLootTables();
+//                    lootTableManager = server.getLootTables();
+//                    LootTable lootTable = lootTableManager.get(lootPoolId);
+
+//                    Level level = player.level();
+//                    // Create a LootContext for the player (this could be for other contexts too)
+//                    LootContext.Builder contextBuilder = new LootContext.Builder(level)
+//                            .withParameter(LootContextParams.THIS_ENTITY, player)
+//                            .withParameter(LootContextParams.ORIGIN, player.position())
+//                            .withLuck(player.getLuck());
+
+                    // Get the pools from the LootTable
+//                    for (LootPool lpool : lootTable.pools) {
+//                        // Find the specific LootPool by name
+//                        if (lpool.getName().toString().equals(lootPoolId)) {
+//                            // Iterate over the entries in this pool
+//                            for (LootEntry entry : lpool.entries) {
+//                                // Generate the loot and add it to the player's inventory
+//                                ItemStack itemStack = entry.getItemStack(contextBuilder.build());
+//
+//                                if (!player.getInventory().add(itemStack)) {
+//                                    player.drop(itemStack, false); // Drop item if inventory is full
+//                                }
+//                                System.out.println("Dropped item: " + entry.getItem().getDescriptionId());
+//                            }
+//                            return; // Exit once the correct pool is processed
+//                        }
+//                    }
+//
+//                    System.err.println("Invalid loot pool ID: " + lootPoolId);
+                }
+
                 System.err.println("Loot Pool Result > "+BuiltInRegistries.LOOT_POOL_ENTRY_TYPE.getValue(ResourceLocation.parse(lootPoolId)));
 //                LootPool lootPool = BuiltInRegistries.LOOT_POOL_ENTRY_TYPE.getValue(ResourceLocation.parse(lootPoolId)); // Convert String to Minecraft Item
 //                LootPool lootPool = BuiltInRegistries.LOOT_POOL_ENTRY_TYPE.getValue(ResourceLocation.parse(lootPoolId)); // Convert String to Minecraft Loot Pool

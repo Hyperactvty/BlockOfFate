@@ -7,11 +7,18 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.advancements.AdvancementProvider;
+import net.minecraft.data.advancements.AdvancementSubProvider;
+import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.ForgeAdvancementProvider;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -19,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class AdvancementsProvider extends ForgeAdvancementProvider {
@@ -41,11 +49,6 @@ public class AdvancementsProvider extends ForgeAdvancementProvider {
         super(output, registries, fileHelper, List.of(new MyAdvancementGenerator())); // Register your generator here
     }
 
-//    @Override
-//    public void addAdvancements(Consumer<Advancement> writer) {
-//        // Register the advancements (this will write to the data files)
-//        ModAdvancements.registerAdvancements(writer);
-//    }
 // Implement the AdvancementGenerator to generate the advancement
     public static class MyAdvancementGenerator implements AdvancementGenerator {
 

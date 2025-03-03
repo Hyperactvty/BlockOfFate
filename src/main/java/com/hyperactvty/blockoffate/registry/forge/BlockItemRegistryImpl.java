@@ -22,32 +22,32 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockItemRegistryImpl {
-    public static Map<String, Supplier<Item>> items = new LinkedHashMap();
-    public static Map<String, Block> blocks = new HashMap();
-    public static Map<String, Tuple<String, CreativeModeTab>> itemNameToGroup = new HashMap();
-
-    public static void registerItemPlatformSpecific(String itemId, Supplier<Item> item, Tuple<String, CreativeModeTab> group) {
-        items.put(itemId, item);
-        itemNameToGroup.put(itemId, group);
-    }
-
-    public static void registerBlockPlatformSpecific(String blockId, Block block, boolean registerItem) {
-        if (registerItem) {
-            BlockItems.BLOCKS.add(block);
-            registerBlockItemPlatformSpecific(blockId, block, new Tuple("building_blocks", (CreativeModeTab)BuiltInRegistries.CREATIVE_MODE_TAB.getValue(CreativeModeTabs.BUILDING_BLOCKS)));
-        }
-
-        blocks.put(blockId, block);
-    }
-
-    public static void registerBlockItemPlatformSpecific(String itemName, Block block, Tuple<String, CreativeModeTab> group) {
-
-        registerItemPlatformSpecific(itemName, () -> {
-            return new BlockItem(block, (new Properties()).useBlockDescriptionPrefix().setId( DeferredRegister.create(ForgeRegistries.ITEMS, "blockoffate").key(itemName)));
-        }, group);
-    }
-
-    public static boolean isModLoaded(String modId) {
-        return ModList.get().isLoaded(modId);
-    }
+//    public static Map<String, Supplier<Item>> items = new LinkedHashMap();
+//    public static Map<String, Block> blocks = new HashMap();
+//    public static Map<String, Tuple<String, CreativeModeTab>> itemNameToGroup = new HashMap();
+//
+//    public static void registerItemPlatformSpecific(String itemId, Supplier<Item> item, Tuple<String, CreativeModeTab> group) {
+//        items.put(itemId, item);
+//        itemNameToGroup.put(itemId, group);
+//    }
+//
+//    public static void registerBlockPlatformSpecific(String blockId, Block block, boolean registerItem) {
+//        if (registerItem) {
+//            BlockItems.BLOCKS.add(block);
+//            registerBlockItemPlatformSpecific(blockId, block, new Tuple("building_blocks", (CreativeModeTab)BuiltInRegistries.CREATIVE_MODE_TAB.getValue(CreativeModeTabs.BUILDING_BLOCKS)));
+//        }
+//
+//        blocks.put(blockId, block);
+//    }
+//
+//    public static void registerBlockItemPlatformSpecific(String itemName, Block block, Tuple<String, CreativeModeTab> group) {
+//
+//        registerItemPlatformSpecific(itemName, () -> {
+//            return new BlockItem(block, (new Properties()).useBlockDescriptionPrefix().setId( DeferredRegister.create(ForgeRegistries.ITEMS, "blockoffate").key(itemName)));
+//        }, group);
+//    }
+//
+//    public static boolean isModLoaded(String modId) {
+//        return ModList.get().isLoaded(modId);
+//    }
 }

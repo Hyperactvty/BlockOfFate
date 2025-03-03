@@ -1,5 +1,6 @@
 package com.hyperactvty.blockoffate.blocks;
 
+import com.hyperactvty.blockoffate.registry.LootTables;
 import com.hyperactvty.blockoffate.registry.Statistics;
 import com.hyperactvty.blockoffate.utilities.Fate;
 import com.hyperactvty.blockoffate.utilities.FateExecution;
@@ -24,6 +25,8 @@ import java.util.*;
 public class BlockOfFate_Block extends Block { //BoF_Generic_BLOCK
     public BlockOfFate_Block(Properties properties) {
         super(properties);
+        System.err.println("BLOCK LOOT_TABLE > "+this.asBlock().getLootTable());
+        // Optional.of(LootTables.FIRST_JOIN_WORLD1);
     }
 
     private final String mod_group_id="com.hyperactvty.blockoffate";
