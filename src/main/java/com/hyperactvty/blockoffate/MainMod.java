@@ -1,9 +1,7 @@
 package com.hyperactvty.blockoffate;
 
 import com.hyperactvty.blockoffate.blocks.BlockOfFate_Block;
-import com.hyperactvty.blockoffate.registry.Advancements;
-import com.hyperactvty.blockoffate.registry.CustomFateRegistry;
-import com.hyperactvty.blockoffate.registry.LootTables;
+import com.hyperactvty.blockoffate.registry.*;
 import com.hyperactvty.blockoffate.utilities.Fate;
 import com.mojang.logging.LogUtils;
 import net.minecraft.advancements.Advancement;
@@ -84,22 +82,22 @@ public class MainMod {
      * */
 
     // #region Development
-    public static final RegistryObject<Block> BoF_Generic_BLOCK = BLOCKS.register("bof_generic",
-            () -> new BlockOfFate_Block(BlockBehaviour.Properties.of()
-                    .setId(BLOCKS.key("bof_generic"))
-                    .mapColor(MapColor.QUARTZ)
-                    .destroyTime(0.5f)
-                    .overrideLootTable(Optional.ofNullable(LootTables.FIRST_JOIN_WORLD1))
-            )
-    );
-
-    // Creates a new BlockItem with the id "blockoffate:example_block", combining the namespace and path
-    public static final RegistryObject<Item> BoF_Generic_ITEM = ITEMS.register("bof_generic",
-            () -> new BlockItem(BoF_Generic_BLOCK.get(), new Item.Properties()
-                    .setId(ITEMS.key("bof_generic")) //block_of_fate
-                    .rarity(Rarity.RARE)
-                    .stacksTo(64))
-    );
+//    public static final RegistryObject<Block> BoF_Generic_BLOCK = BLOCKS.register("bof_generic",
+//            () -> new BlockOfFate_Block(BlockBehaviour.Properties.of()
+//                    .setId(BLOCKS.key("bof_generic"))
+//                    .mapColor(MapColor.QUARTZ)
+//                    .destroyTime(0.5f)
+//                    .overrideLootTable(Optional.ofNullable(LootTables.FIRST_JOIN_WORLD1))
+//            )
+//    );
+//
+//    // Creates a new BlockItem with the id "blockoffate:example_block", combining the namespace and path
+//    public static final RegistryObject<Item> BoF_Generic_ITEM = ITEMS.register("bof_generic",
+//            () -> new BlockItem(BoF_Generic_BLOCK.get(), new Item.Properties()
+//                    .setId(ITEMS.key("bof_generic")) //block_of_fate
+//                    .rarity(Rarity.RARE)
+//                    .stacksTo(64))
+//    );
 
     // #endregion Development
 
@@ -118,29 +116,29 @@ public class MainMod {
 //    );
 
     // Creates a new food item with the id "blockoffate:example_id", nutrition 1 and saturation 2
-    public static final RegistryObject<Item> BoF_Lucky_Ham_ITEM = ITEMS.register("bof_lucky_ham",
-        () -> new Item(new Item.Properties()
-            .setId(ITEMS.key("bof_lucky_ham"))
-            .stacksTo(16)
-            .food(new FoodProperties.Builder()
-                .alwaysEdible()
-                .nutrition(1)
-                .saturationModifier(2f)
-                .build()
-            )
-        )
-    );
+//    public static final RegistryObject<Item> BoF_Lucky_Ham_ITEM = ITEMS.register("bof_lucky_ham",
+//        () -> new Item(new Item.Properties()
+//            .setId(ITEMS.key("bof_lucky_ham"))
+//            .stacksTo(16)
+//            .food(new FoodProperties.Builder()
+//                .alwaysEdible()
+//                .nutrition(1)
+//                .saturationModifier(2f)
+//                .build()
+//            )
+//        )
+//    );
 
     // Creates a creative tab with the id "blockoffate:example_tab" for the example item, that is placed after the combat tab
-    public static final RegistryObject<CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("bof_tab", () -> CreativeModeTab.builder()
-            .withTabsBefore(CreativeModeTabs.COMBAT)
-            .icon(() -> BoF_Lucky_Ham_ITEM.get().getDefaultInstance())
-            .title(Component.nullToEmpty("Blocks of Fate"))
-            .withLabelColor(4)
-            .displayItems((parameters, output) -> {
-                output.accept(BoF_Lucky_Ham_ITEM.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
-                output.accept(BoF_Generic_ITEM.get());
-            }).build());
+//    public static final RegistryObject<CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("bof_tab", () -> CreativeModeTab.builder()
+//            .withTabsBefore(CreativeModeTabs.COMBAT)
+//            .icon(() -> BoF_Lucky_Ham_ITEM.get().getDefaultInstance())
+//            .title(Component.nullToEmpty("Blocks of Fate"))
+//            .withLabelColor(4)
+//            .displayItems((parameters, output) -> {
+//                output.accept(BoF_Lucky_Ham_ITEM.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
+//                output.accept(BoF_Generic_ITEM.get());
+//            }).build());
 
     public MainMod(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
@@ -148,18 +146,22 @@ public class MainMod {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
+        // Register's the `BlockItems.register(modEventBus)`
+        BlockItems.register(modEventBus);
+        EnchantmentRegistry.register(modEventBus);
+
         // Register the Deferred Register to the mod event bus so blocks get registered
-        BLOCKS.register(modEventBus);
-        // Register the Deferred Register to the mod event bus so items get registered
-        ITEMS.register(modEventBus);
-        // Register the Deferred Register to the mod event bus so tabs get registered
-        CREATIVE_MODE_TABS.register(modEventBus);
+//        BLOCKS.register(modEventBus);
+//        // Register the Deferred Register to the mod event bus so items get registered
+//        ITEMS.register(modEventBus);
+//        // Register the Deferred Register to the mod event bus so tabs get registered
+//        CREATIVE_MODE_TABS.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
 
         // Register the item to a creative tab
-        modEventBus.addListener(this::addCreative);
+//        modEventBus.addListener(this::addCreative);
 
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
@@ -178,12 +180,12 @@ public class MainMod {
     }
 
     // Add the example block item to the building blocks tab
-    private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
-//            event.accept(EXAMPLE_BLOCK_ITEM);
-            event.accept(BoF_Generic_ITEM);
-        }
-    }
+//    private void addCreative(BuildCreativeModeTabContentsEvent event) {
+//        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
+////            event.accept(EXAMPLE_BLOCK_ITEM);
+//            event.accept(BoF_Generic_ITEM);
+//        }
+//    }
 
     public static JSONObject loadConfig() {
         try {

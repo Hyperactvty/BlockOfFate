@@ -2,26 +2,17 @@ package com.hyperactvty.blockoffate.registry;
 
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.function.ToIntFunction;
-import java.util.stream.Stream;
 
 //import com.hyperactvty.blockoffate.blocks.ExampleStoneBlock;
 import com.hyperactvty.blockoffate.MainMod;
 import com.hyperactvty.blockoffate.blocks.BlockOfFate_Block;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.biome.Biome.Precipitation;
-import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.ChainBlock;
-import net.minecraft.world.level.block.ConcretePowderBlock;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -34,18 +25,23 @@ public class BlockItems {
             DeferredRegister.create(ForgeRegistries.BLOCKS, MainMod.MODID);
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ForgeRegistries.ITEMS, MainMod.MODID);
+    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
+            DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MainMod.MODID);
+
+//    public static final DeferredRegister<BlockItem> BLOCK_ITEMS =
+//            DeferredRegister.create(ForgeRegistries.ITEMS, MainMod.MODID);
 
     public static final Map<Tuple<String, CreativeModeTab>, Set<Item>> ITEM_GROUP_LIST_MAP = new LinkedHashMap();
 
     //region BLOCKS
-    public static final RegistryObject<Block> BoF_GENERIC_BLOCK = BLOCKS.register("bof_generic",
+    public static final RegistryObject<Block> BoF_GENERIC_BLOCK = BLOCKS.register/*registerBlock*/("bof_generic",
             () -> new BlockOfFate_Block(BlockBehaviour.Properties.of()
                     .setId(BLOCKS.key("bof_generic"))
                     .mapColor(MapColor.QUARTZ)
                     .destroyTime(0.5f) // .overrideLootTable(Optional.ofNullable(LootTables.FIRST_JOIN_WORLD1))
             )
     );
-    public static final RegistryObject<Block> BoF_SLAB_OF_HAM_BLOCK = BLOCKS.register("slab_of_ham",
+    public static final RegistryObject<Block> BoF_SLAB_OF_HAM_BLOCK = /*BLOCKS.register*/registerBlock("slab_of_ham",
             () -> new BlockOfFate_Block(BlockBehaviour.Properties.of()
                     .setId(BLOCKS.key("slab_of_ham"))
                     .mapColor(MapColor.COLOR_PINK)
@@ -79,6 +75,17 @@ public class BlockItems {
             )
     );
 
+    public static final RegistryObject<CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("bof_tab", () -> CreativeModeTab.builder()
+            .withTabsBefore(CreativeModeTabs.COMBAT)
+            .icon(() -> BoF_LUCKY_HAM_ITEM.get().getDefaultInstance())
+            .title(Component.nullToEmpty("Blocks of Fate"))
+            .withLabelColor(4)
+            .displayItems((parameters, output) -> {
+                output.accept(BoF_LUCKY_HAM_ITEM.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
+                output.accept(BoF_GENERIC_ITEM.get());
+                output.accept(BoF_SLAB_OF_HAM_BLOCK.get());
+            }).build());
+
 //    public static final RegistryObject<Item> METAL_DETECTOR = ITEMS.register("metal_detector",
 //            () -> new MetalDetectorItem(new Item.Properties().durability(100)));
 
@@ -90,18 +97,32 @@ public class BlockItems {
     //endregion ITEMS
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
+        System.out.println("registerBlock block ["+name + "] >"+block);
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
         registerBlockItem(name, toReturn);
         return toReturn;
     }
-
-    private static <T extends Block> RegistryObject<Item> registerBlockItem(String name, RegistryObject<T> block) {
-        return ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
+//    private static <T extends Block> RegistryObject<Item> registerBlockItem(String name, RegistryObject<T> block) {
+    private static <T extends Block> void registerBlockItem(String name, RegistryObject<T> block) {
+//        ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
+        ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()
+                .setId(ITEMS.key(name))
+        ));
+        System.out.println("registering blockItem ["+name + "] >"+ITEMS.key(name));
     }
 
     public static void register(IEventBus eventBus) {
+        System.out.println("register called.");
+        System.out.println("Block Count > "+BLOCKS.getEntries().size());
+        System.out.println("Block Count > "+BLOCKS.getEntries());
+        System.out.println("Item Count > "+ITEMS.getEntries().size());
+        System.out.println("Item Count > "+ITEMS.getEntries());
         BLOCKS.register(eventBus);
         ITEMS.register(eventBus);
+        CREATIVE_MODE_TABS.register(eventBus);
+        for(Object i : ITEMS.getEntries()) {
+            System.out.println("register -> ITEMS > "+i.getClass().getName());
+        }
     }
 
 //    public static Stream<Block> streamBlocks() {

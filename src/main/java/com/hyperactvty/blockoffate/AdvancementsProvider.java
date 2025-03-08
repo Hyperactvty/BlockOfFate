@@ -47,6 +47,7 @@ public class AdvancementsProvider extends ForgeAdvancementProvider {
 
     public AdvancementsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, ExistingFileHelper fileHelper) {
         super(output, registries, fileHelper, List.of(new MyAdvancementGenerator())); // Register your generator here
+        System.out.println("AdvancementsProvider Constructor called.");
     }
 
 // Implement the AdvancementGenerator to generate the advancement

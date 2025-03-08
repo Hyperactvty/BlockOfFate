@@ -2,6 +2,7 @@ package com.hyperactvty.blockoffate.data;
 
 import com.hyperactvty.blockoffate.AdvancementsProvider;
 import com.hyperactvty.blockoffate.MLootTableProvider;
+import com.hyperactvty.blockoffate.data.loot.ModBlockLootTables;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -28,8 +29,9 @@ public class ModDataGenerator {
 
         // Add our custom advancements provider
         generator.addProvider(event.includeServer(), new AdvancementsProvider(output, registries, existingFileHelper));
+        generator.addProvider(event.includeServer(), ModLootTableProvider.create(output, registries));
+        generator.addProvider(event.includeServer(), new ModItemModelProvider(output, existingFileHelper));
 //        generator.addProvider(event.includeServer(), new ModLootTableProvider(output, registries, existingFileHelper));
-        generator.addProvider(event.includeServer(), new MLootTableProvider(output, registries, existingFileHelper));
-//        generator.addProvider(event.includeServer(), new SubProviderEntry(ModLootTables::new, fileHelper));
+//        generator.addProvider(event.includeServer(), new MLootTableProvider(output, registries, existingFileHelper));
     }
 }

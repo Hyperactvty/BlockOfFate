@@ -1,6 +1,9 @@
 package com.hyperactvty.blockoffate.data;
 
+import com.hyperactvty.blockoffate.MLootTableProvider;
+import com.hyperactvty.blockoffate.data.loot.ModBlockLootTables;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
@@ -11,21 +14,174 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraft.util.context.ContextKeySet;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
-public class ModLootTableProvider {
-    public static LootTableProvider create(PackOutput output) {
+public class ModLootTableProvider extends LootTableProvider {
+
+//    private static CompletableFuture<HolderLookup.Provider> registries;
+
+    public static LootTableProvider create(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         return new LootTableProvider(output, Set.of(), List.of(
                 new LootTableProvider.SubProviderEntry(ModBlockLootTables::new, LootContextParamSets.BLOCK)
-        ));
+        ), registries);
+        /**
+        System.out.println("ModLootTableProvider `create` called.");
+//        System.out.println(ModLootTableProvider.getTables());
+        return new LootTableProvider(output, Set.of(), List.of(new SubProviderEntry(
+                provider -> (LootTableSubProvider) lootTableConsumer -> {
+                    System.out.println("Generating Loot Table for: first_join_world");
+                    System.out.println("provider > "+provider);
+                    System.out.println("lootTableConsumer > "+lootTableConsumer);
+                    System.out.println("PackOutput > "+output);
+                    System.out.println("registries > "+registries);
+
+                    // Define the LootTable.Builder correctly
+                    LootTable.Builder builder = LootTable.lootTable();
+
+                    // Register the loot table
+                    lootTableConsumer.accept(
+                            ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse("blockoffate:advancements/first_join_world")),
+                            builder
+                    );
+                    lootTableConsumer.accept(
+                            ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse("blockoffate:block/bof_generic")),
+                            builder
+                    );
+                    lootTableConsumer.accept(
+                            ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse("blockoffate:block/slab_of_ham")),
+                            builder
+                    );
+                    builder.build();
+                    System.out.println("lootTableConsumer > "+lootTableConsumer);
+                    System.out.println("builder > "+builder);
+                    System.out.println("builder > "+builder.getClass());
+                    System.out.println("builder > "+builder.unwrap());
+
+                },
+                LootContextParamSets.BLOCK // Use the correct context param set
+        )), registries);
+*/
     }
+
+
+    public ModLootTableProvider(PackOutput output, Set<ResourceKey<LootTable>> keySet, List<SubProviderEntry> subProviderEntries, CompletableFuture<HolderLookup.Provider> registries) {
+        super(output, keySet, subProviderEntries, registries);
+//        this.registries = registries;
+    }
+
+//    ModLootTableProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, ExistingFileHelper existingFileHelper) {
+////        super(output, registries, existingFileHelper);
+////        super(output, Set.of(), Collections.singletonList(new SubProviderEntry((Function<HolderLookup.Provider, LootTableSubProvider>) registries, LootContextParamSets.BLOCK)), registries);
+//        super(output, Set.of(), List.of(new SubProviderEntry(
+//                (HolderLookup.Provider provider) -> new LootTableSubProvider() {
+//                    @Override
+//                    public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> lootTableConsumer) {
+//                        // Register custom loot table generation logic here
+//                        System.out.println("Generating Loot Table for: first_join_world");
+//                        lootTableConsumer.accept(
+//                                ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse("blockoffate:advancements/first_join_world")),
+//                                (LootTable.Builder b) -> new LootTableProvider(output,Set.of(),this,registries) {
+//
+////                                    LootTable.lootTable()
+////                                    .withPool(
+////                                    LootPool.lootPool()
+////                                    .add(LootItem.lootTableItem(Items.DIAMOND))
+////                                    );
+//                                }
+//                        );
+//                    }
+//                },
+//                new ContextKeySet.Builder().build()
+//        )), registries);
+//        this.registries = registries;
+//    }
+
+    ModLootTableProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, ExistingFileHelper existingFileHelper) {
+        super(output, Set.of(), List.of(new SubProviderEntry(
+                provider -> new LootTableSubProvider() {
+                    @Override
+                    public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> lootTableConsumer) {
+                        System.out.println("Generating Loot Table for: first_join_world");
+                        System.out.println("PackOutput > "+output);
+                        System.out.println("registries > "+registries);
+                        System.out.println("ExistingFileHelper > "+existingFileHelper);
+
+                        // Define the LootTable.Builder correctly
+                        LootTable.Builder builder = LootTable.lootTable();
+
+                        // Register the loot table
+                        lootTableConsumer.accept(
+                                ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse("blockoffate:advancements/first_join_world")),
+                                builder
+                        );
+                    }
+                },
+                LootContextParamSets.BLOCK // Use the correct context param set
+        )), registries);
+
+        System.out.println("ModLootTableProvider Constructor called.");
+
+//        this.registries = registries;
+    }
+
+/** // Good One
+    private static LootTableProvider create(PackOutput output) {
+        return new LootTableProvider(output, Set.of(), List.of(
+                new LootTableProvider.SubProviderEntry(ModBlockLootTables::new, LootContextParamSets.BLOCK)
+//        new LootTableProvider.SubProviderEntry(ModBlockLootTables::new, LootContextParamSets.BLOCK)
+        ), registries);
+    }
+ */
+
+    @Override
+    public List<SubProviderEntry> getTables() {
+        // Return the list of SubProviderEntry that registers your loot tables
+        return List.of(
+                new SubProviderEntry(
+                        (HolderLookup.Provider provider) -> new LootTableSubProvider() {
+                            @Override
+                            public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> lootTableConsumer) {
+                                // Register custom loot table generation logic here
+                                System.out.println("Generating Get Tables Loot Table for: first_join_world > "+provider);
+                                lootTableConsumer.accept(
+                                        ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse("blockoffate:advancements/first_join_world")),
+                                        createYourCustomLootTable()
+                                );
+                            }
+                        },
+                        new ContextKeySet.Builder().build()
+                )
+        );
+    }
+
+    // Method that generates a custom loot table
+    private LootTable.Builder createYourCustomLootTable() {
+//        if (Items.DIAMOND == null) {
+//            System.err.println("Diamond item is null!");
+//        } else {
+//            System.err.println("Diamond item is NOT null!");
+//        }
+        // Your custom loot table generation logic here
+        return LootTable.lootTable()
+                .withPool(
+                        LootPool.lootPool()
+                                .add(LootItem.lootTableItem(Items.DIAMOND))
+                );
+    }
+
+//    public static ModLootTableProvider createModLootTableProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, ExistingFileHelper existingFileHelper) {
+//        return new ModLootTableProvider(output, registries, existingFileHelper);
+//    }
 }
 
 //public class ModLootTableProvider extends LootTableProvider {
