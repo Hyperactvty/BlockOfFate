@@ -5,14 +5,14 @@
     }
   },
   "display": {
-    "background": "minecraft:textures/block/crying_obsidian",
+    "background": "minecraft:textures/block/crying_obsidian.png",
     "description": {
       "translate": "advancement.blockoffate.first_join_world.desc"
     },
     "frame": "goal",
     "icon": {
       "count": 1,
-      "id": "blockoffate:bof_lucky_ham"
+      "id": "blockoffate:lucky_ham"
     },
     "title": {
       "translate": "advancement.blockoffate.first_join_world.title"
@@ -27,7 +27,10 @@
     "experience": 250,
     "loot": [
       "minecraft:chests/end_city_treasure",
-      "blockoffate:loot_tables/advancements/first_join_world"
+      "blockoffate:loot_table/advancement/first_join_world",
+      "blockoffate:loot_table/advancements/first_join_world",
+      "blockoffate:loot_tables/advancements/first_join_world",
+      "blockoffate:loot_table/first_join_world"
     ]
   },
   "sends_telemetry_event": true
