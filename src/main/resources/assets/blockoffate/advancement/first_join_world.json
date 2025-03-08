@@ -13,7 +13,7 @@
     "hidden": false,
     "icon": {
       "count": 1,
-      "id": "blockoffate:bof_lucky_ham"
+      "id": "blockoffate:lucky_ham"
     },
     "title": {
       "translate": "advancement.blockoffate.first_join_world.title"

@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "blockoffate:block/slab_of_ham"
+    },
+    "type=double": {
+      "model": "minecraft:block/nether_wart_block"
+    },
+    "type=top": {
+      "model": "blockoffate:block/slab_of_ham_top"
+    },
+    "": {
+      "model": "blockoffate:block/slab_of_ham"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "description": "Fate",
+  "supported_items": "#minecraft:enchantable/mining",
+  "weight": 5,
+  "max_level": 8,
+  "min_cost": {
+    "base": 1,
+    "per_level_above_first": 1
+  },
+  "max_cost": {
+    "base": 51,
+    "per_level_above_first": 10
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "hand"
+  ],
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "id": "block_interaction_range",
+        "attribute": "minecraft:block_interaction_range",
+        "amount": {
+          "type": "minecraft:linear",
+          "base": 1,
+          "per_level_above_first": 1
+        },
+        "operation": "add_value",
+        "uuid": "3a4f09dc-231d-41ac-8c6b-ba5adb86ac0c"
+      }
+    ]
+  }
+}
