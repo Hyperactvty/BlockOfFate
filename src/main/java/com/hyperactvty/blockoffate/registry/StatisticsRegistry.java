@@ -2,7 +2,6 @@ package com.hyperactvty.blockoffate.registry;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.Stats;
 
@@ -38,5 +37,8 @@ public class StatisticsRegistry {
 
         Registry.register(BuiltInRegistries.CUSTOM_STAT, "player_luck", Statistics.PLAYER_LUCK);
         Stats.CUSTOM.get(Statistics.PLAYER_LUCK, StatFormatter.DEFAULT);
+        Registry.register(BuiltInRegistries.CUSTOM_STAT, "karma", Statistics.KARMA);
+        Stats.CUSTOM.get(Statistics.KARMA, IModStatFormer.DIVIDE_BY_THOUSAND);
+//        Stats.CUSTOM.get(Statistics.KARMA, StatFormatter.DIVIDE_BY_TEN);
     }
 }

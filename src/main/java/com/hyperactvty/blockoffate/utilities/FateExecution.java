@@ -2,10 +2,7 @@ package com.hyperactvty.blockoffate.utilities;
 
 import com.hyperactvty.blockoffate.MainMod;
 import com.hyperactvty.blockoffate.records.Rate;
-import com.hyperactvty.blockoffate.registry.CustomFateRegistry;
-import com.hyperactvty.blockoffate.registry.LootTables;
-import com.hyperactvty.blockoffate.registry.PlayerRegistry;
-import com.hyperactvty.blockoffate.registry.Statistics;
+import com.hyperactvty.blockoffate.registry.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -28,6 +25,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class FateExecution {
@@ -39,9 +37,10 @@ public class FateExecution {
         JSONArray pool = MainMod.fatePools;
         player = _player;
         // Get the player's `luck` stat
-        float playerLuck = 0.0f;
-        PlayerRegistry.checkPlayerLuck(player);
-        Utils.incrementStat(player, "player_luck", 1);
+        double playerKarma = PlayerFate.getKarma(player);
+        System.out.println("playerKarma > "+playerKarma);
+
+//        Utils.incrementStat(player, "player_luck", 1);
 
         List<JSONObject> filteredPools = new ArrayList<>();
 
@@ -184,6 +183,7 @@ public class FateExecution {
 
         Utils.displayTitle(player, TextColor.parseColor(rate.color()).getOrThrow(),displayTitle); // Example white title
         Utils.incrementStat(player, rate.tier());
+        PlayerFate.setKarma(player, !Objects.equals(rate.tier(), "CURSE") ? FateActions.Actions.BlockOfFate_Broken : FateActions.Actions.BlockOfFate_Cursed_Broken );
 
     }
 

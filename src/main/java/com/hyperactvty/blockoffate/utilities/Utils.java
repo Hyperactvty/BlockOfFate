@@ -3,7 +3,9 @@ package com.hyperactvty.blockoffate.utilities;
 import com.hyperactvty.blockoffate.records.Rate;
 import com.hyperactvty.blockoffate.registry.CustomFateRegistry;
 import com.hyperactvty.blockoffate.registry.Statistics;
+import com.mojang.authlib.GameProfile;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
@@ -12,9 +14,11 @@ import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stat;
 import net.minecraft.stats.Stats;
 import net.minecraft.stats.StatsCounter;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import org.json.JSONObject;
 
 import java.awt.*;
@@ -34,8 +38,22 @@ public class Utils {
         statList.put(/*"fates_s"*/"S", Statistics.FATES_S);
         statList.put(/*"fates_ss"*/"SS", Statistics.FATES_SS);
         statList.put(/*"fates_sss"*/"SSS", Statistics.FATES_SSS);
-        statList.put(/*"fates_sss"*/"player_luck", Statistics.PLAYER_LUCK);
+        statList.put(/*"player_luck"*/"player_luck", Statistics.PLAYER_LUCK);
+
+        statList.put(/*"karma"*/"karma", Statistics.KARMA);
     }
+
+    private static final int SCALE_FACTOR = 1000; // Precision
+
+    public static <T> double getStat(Player player, String statName, T type) {
+        double amt = 0;
+        if (player instanceof ServerPlayer serverPlayer) {
+            StatsCounter statsCounter = serverPlayer.getStats();
+            amt = statsCounter.getValue(Stats.CUSTOM.get(statList.get(statName)));
+            System.err.println("Player Stat > " + amt);
+        }
+        return amt / (type.equals(double.class) ? (double) SCALE_FACTOR : 1);
+    }//Stats.CUSTOM.get(statList.get(statName)); }
 
     public static void incrementStat(Player player, ResourceLocation stat) {
         player.awardStat(Stats.CUSTOM.get(stat));
@@ -58,6 +76,14 @@ public class Utils {
 //            statsManager.setValue(player, Stats.CUSTOM.get(stat), (int) (currentValue + amount));
 //        }
         player.awardStat(Stats.CUSTOM.get(stat), amount);
+    }
+
+    public static void incrementStat(Player player, String statName, double amount) {
+        int scaledAmount = (int) Math.round(amount * SCALE_FACTOR);
+        ResourceLocation stat = statList.get(statName);
+        player.awardStat(Stats.CUSTOM.get(stat), scaledAmount); // Right one
+
+//        player.awardStat(Stats.CUSTOM.get(stat), Math.ceil(amount * 100));
     }
 
     public static void decrementStat(Player player, String statName, int amount) {

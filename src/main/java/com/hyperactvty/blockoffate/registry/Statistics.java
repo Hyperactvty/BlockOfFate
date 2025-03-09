@@ -23,4 +23,5 @@ public class Statistics {
     public static final ResourceLocation FATES_SSS = ResourceLocation.fromNamespaceAndPath("blockoffate", "fates_sss");
 
     public static final ResourceLocation PLAYER_LUCK = ResourceLocation.fromNamespaceAndPath("blockoffate", "player_luck");
+    public static final ResourceLocation KARMA = ResourceLocation.fromNamespaceAndPath("blockoffate", "karma");
 }

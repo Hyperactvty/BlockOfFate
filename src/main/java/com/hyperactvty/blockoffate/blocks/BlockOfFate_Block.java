@@ -29,7 +29,7 @@ public class BlockOfFate_Block extends Block { //BoF_Generic_BLOCK
         // Optional.of(LootTables.FIRST_JOIN_WORLD1);
     }
 
-    private final String mod_group_id="com.hyperactvty.blockoffate";
+//    private final String mod_group_id="com.hyperactvty.blockoffate";
     Random random = new Random();
     private static Rate rObj = new Rate(null, null, null, 0, null, null);
 
@@ -135,7 +135,7 @@ public class BlockOfFate_Block extends Block { //BoF_Generic_BLOCK
 //    }
 
     public Rate determineFate(BlockState state, Level world) {
-        LogUtils.getLogger().info("BLOCK >> {} | {}", state.getBlock(), mod_group_id);
+//        LogUtils.getLogger().info("BLOCK >> {} | {}", state.getBlock(), mod_group_id);
 //        LogUtils.getLogger().info("Will it work... > {}", state.getBlock().getName().getContents());
 //        LogUtils.getLogger().info("Will it work... > {}", state.getBlock().getName());
 //        LogUtils.getLogger().info("Will it work... > {}", state.getBlock().getName().toString().contains("block.blockoffate.bof_generic"));

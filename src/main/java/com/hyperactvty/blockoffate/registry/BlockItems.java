@@ -42,7 +42,7 @@ public class BlockItems {
             )
     );
     public static final RegistryObject<Block> BoF_SLAB_OF_HAM_BLOCK = /*BLOCKS.register*/registerBlock("slab_of_ham",
-            () -> new BlockOfFate_Block(BlockBehaviour.Properties.of()
+            () -> new Block(BlockBehaviour.Properties.of()
                     .setId(BLOCKS.key("slab_of_ham"))
                     .mapColor(MapColor.COLOR_PINK)
                     .destroyTime(0.5f)
