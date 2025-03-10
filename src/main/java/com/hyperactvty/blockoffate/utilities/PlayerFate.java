@@ -19,6 +19,7 @@ public class PlayerFate {
      */
 
     public static void setKarma(Player player, FateActions.Actions action) {
+        System.err.println("[Karma] "+player+" "+action+" : "+FateActions.getActionEffect(action)+" karma...");
         Utils.incrementStat(player, "karma", FateActions.getActionEffect(action));
     }
 }
