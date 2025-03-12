@@ -12,12 +12,13 @@
   "stat.blockoffate.fates_ss": "Block of Fate: \"SS\" Fate Granted",
   "stat.blockoffate.fates_sss": "Block of Fate: \"SSS\" Fate Granted",
   "stat.blockoffate.player_luck": "Block of Fate: Player Luck",
+  "stat.blockoffate.karma": "Block of Fate: Player Karma",
 
   "subtitles.blockoffate.cursed_fate": "Cursed Fate",
 
   "item.blockoffate.bof_generic": "Block of Fate",
-  "item.blockoffate.bof_lucky_ham": "§6Lucky Ham",
   "item.blockoffate.lucky_ham": "§6Lucky Ham MK. II",
+  "item.blockoffate.karma_meter": "§4Karma Meter",
   "advancement.blockoffate.first_join_world.title": "Welcome to Block of Fate!",
   "advancement.blockoffate.first_join_world.desc": "Where will FATE lead you..."
 }

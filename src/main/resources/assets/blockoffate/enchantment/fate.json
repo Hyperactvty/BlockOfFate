@@ -27,6 +27,17 @@
         },
         "operation": "add_value",
         "uuid": "3a4f09dc-231d-41ac-8c6b-ba5adb86ac0c"
+      },
+      {
+        "id": "luck",
+        "attribute": "minecraft:luck",
+        "amount": {
+          "type": "minecraft:add_multiplied_total",
+          "base": 50,
+          "per_level_above_first": 50
+        },
+        "operation": "add_value",
+        "uuid": "3a4f09dc-231d-41ac-8c6b-ba5adb86ac0c"
       }
     ]
   }
