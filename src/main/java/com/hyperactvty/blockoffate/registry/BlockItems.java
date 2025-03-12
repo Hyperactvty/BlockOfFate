@@ -6,6 +6,8 @@ import java.util.function.Supplier;
 //import com.hyperactvty.blockoffate.blocks.ExampleStoneBlock;
 import com.hyperactvty.blockoffate.MainMod;
 import com.hyperactvty.blockoffate.blocks.BlockOfFate_Block;
+import com.hyperactvty.blockoffate.items.KarmaMeter_Item;
+import com.hyperactvty.blockoffate.items.LuckyHam_Item;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Tuple;
@@ -63,9 +65,10 @@ public class BlockItems {
     );
 
     public static final RegistryObject<Item> BoF_LUCKY_HAM_ITEM = ITEMS.register("lucky_ham",
-            () -> new Item(new Item.Properties()
+            () -> new LuckyHam_Item(new Item.Properties()
                     .setId(ITEMS.key("lucky_ham"))
                     .stacksTo(16)
+//                    .food(new FoodProperties.Builder()
                     .food(new FoodProperties.Builder()
                             .alwaysEdible()
                             .nutrition(1)
@@ -75,13 +78,30 @@ public class BlockItems {
             )
     );
 
+//    ItemProperties.register(myItem, new ResourceLocation("modid", "karma"), (stack, world, entity, seed) -> {
+//        if (entity instanceof Player player) {
+//            int karma = player.getCapability(KarmaCapabilityProvider.KARMA).orElse(0);
+//            return karma;
+//        }
+//        return 0;
+//    });
+
+
+    public static final RegistryObject<Item> BoF_KARMA_METER_ITEM = ITEMS.register("karma_meter",
+            () -> new KarmaMeter_Item(new Item.Properties()
+                    .setId(ITEMS.key("karma_meter"))
+                    .stacksTo(1)
+            )
+    );
+
     public static final RegistryObject<CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("bof_tab", () -> CreativeModeTab.builder()
             .withTabsBefore(CreativeModeTabs.COMBAT)
             .icon(() -> BoF_LUCKY_HAM_ITEM.get().getDefaultInstance())
             .title(Component.nullToEmpty("Blocks of Fate"))
             .withLabelColor(4)
             .displayItems((parameters, output) -> {
-                output.accept(BoF_LUCKY_HAM_ITEM.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
+                output.accept(BoF_LUCKY_HAM_ITEM.get());
+                output.accept(BoF_KARMA_METER_ITEM.get());
                 output.accept(BoF_GENERIC_ITEM.get());
                 output.accept(BoF_SLAB_OF_HAM_BLOCK.get());
             }).build());

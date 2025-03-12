@@ -3,22 +3,29 @@ package com.hyperactvty.blockoffate;
 import com.hyperactvty.blockoffate.blocks.BlockOfFate_Block;
 import com.hyperactvty.blockoffate.registry.*;
 import com.hyperactvty.blockoffate.utilities.Fate;
+import com.hyperactvty.blockoffate.utilities.Utils;
 import com.mojang.logging.LogUtils;
+import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -30,6 +37,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -160,6 +168,8 @@ public class MainMod {
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new KarmaEventHandler());
+        MinecraftForge.EVENT_BUS.register(new ModClientEvents(modEventBus));
+
 
         // Register the item to a creative tab
 //        modEventBus.addListener(this::addCreative);
@@ -333,7 +343,20 @@ public class MainMod {
             // Some client setup code
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+
+            // #region KARMA METER
+//            ModClientEvents.subscribe(FMLJavaModLoadingContext.get().getModEventBus());
+////            ModClientEvents.subscribe(FMLJavaModLoadingContext.get().getModEventBus());
+//
+////            IEventBus modEventBus = context.getModEventBus();
+//            IEventBus modEventBus = event..getModEventBus();
+////            MinecraftForge.EVENT_BUS.register(new ModClientEvents());
+//            MinecraftForge.EVENT_BUS.register(new ModClientEvents(FMLJavaModLoadingContext));
+
+
+            // #endregion KARMA METER
         }
+
 
 //        @SubscribeEvent
 //        public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {

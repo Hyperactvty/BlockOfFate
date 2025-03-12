@@ -142,4 +142,20 @@ public class Utils {
         }
         return;
     }
+
+    public static int interpolateColor(int startColor, int endColor, float ratio) {
+        int startRed = (startColor >> 16) & 0xFF;
+        int startGreen = (startColor >> 8) & 0xFF;
+        int startBlue = startColor & 0xFF;
+
+        int endRed = (endColor >> 16) & 0xFF;
+        int endGreen = (endColor >> 8) & 0xFF;
+        int endBlue = endColor & 0xFF;
+
+        int red = (int) (startRed + (endRed - startRed) * ratio);
+        int green = (int) (startGreen + (endGreen - startGreen) * ratio);
+        int blue = (int) (startBlue + (endBlue - startBlue) * ratio);
+
+        return (red << 16) | (green << 8) | blue;
+    }
 }

@@ -7,11 +7,10 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.client.data.models.ItemModelOutput;
-import net.minecraft.client.data.models.model.ModelInstance;
-import net.minecraft.client.data.models.model.ModelTemplate;
-import net.minecraft.client.data.models.model.ModelTemplates;
-import net.minecraft.client.data.models.model.TextureMapping;
+import net.minecraft.client.data.models.model.*;
 import net.minecraft.client.renderer.item.ItemModel;
+import net.minecraft.client.renderer.item.RangeSelectItemModel;
+import net.minecraft.client.renderer.item.properties.numeric.Time;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -27,6 +26,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 //import net.minecraftforge.client.model.generators.ItemModelBuilder;
@@ -42,10 +44,18 @@ public class ModItemModelProvider extends ModelProvider {
 //        super(output, consumer);
 //    }
 
-    private final BiConsumer<ResourceLocation, ModelInstance> modelOutput;
+    protected final ItemModelOutput itemModelOutput;
+    protected final BiConsumer<ResourceLocation, ModelInstance> modelOutput;
+
+    public ModItemModelProvider(ItemModelOutput p_375677_, BiConsumer<ResourceLocation, ModelInstance> p_377569_) {
+        super(p_375677_);
+        this.itemModelOutput = p_375677_;
+        this.modelOutput = p_377569_;
+    }
 
     public ModItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
         super(output);
+        this.itemModelOutput = itemModelOutput;
 
         System.out.println("ModItemModelProvider Constructor called.");
 
@@ -145,12 +155,32 @@ public class ModItemModelProvider extends ModelProvider {
 //                .texture("layer0",ResourceLocation.parse(MainMod.MODID+":item/" + item.getId().getPath()));
     }
 
-//    private ModelProvider simpleItem(RegistryObject<Item> item) {
-//        return ItemModelGenerators.generateFlatItem(item.getId().getPath(), ResourceLocation.parse("item/generated"))
-//                .texture("layer0",ResourceLocation.parse(MainMod.MODID+":item/" + item.getId().getPath()));
-////        return ModelProvider.SimpleModelCollector.accept(param0, param1)
-////                .texture("layer0",ResourceLocation.parse(MainMod.MODID+":item/" + item.getId().getPath()));
-////        return withExistingParent(item.getId().getPath(),ResourceLocation.parse("item/generated"))
-////                .texture("layer0",ResourceLocation.parse(MainMod.MODID+":item/" + item.getId().getPath()));
+//    public void generateKarmaMeterItem(Item p_376265_) {
+//        List<RangeSelectItemModel.Entry> list = new ArrayList<>();
+//        ItemModel.Unbaked itemmodel$unbaked = ItemModelUtils.plainModel(this.createFlatItemModel(p_376265_, "_00", ModelTemplates.FLAT_ITEM));
+//        list.add(ItemModelUtils.override(itemmodel$unbaked, 0.0F));
+//
+//        for (int i = 1; i < 32; i++) {
+//            ItemModel.Unbaked itemmodel$unbaked1 = ItemModelUtils.plainModel(
+//                    this.createFlatItemModel(p_376265_, String.format(Locale.ROOT, "_%02d", i), ModelTemplates.FLAT_ITEM)
+//            );
+//            list.add(ItemModelUtils.override(itemmodel$unbaked1, (float)i - 0.5F));
+//        }
+//
+//        list.add(ItemModelUtils.override(itemmodel$unbaked, 31.5F/*63.5F*/));
+//        this.itemModelOutput
+//                .accept(
+//                        p_376265_,
+//                        ItemModelUtils.inOverworld(
+//                                ItemModelUtils.rangeSelect(new Time(true, Time.TimeSource.DAYTIME), 64.0F, list),
+//                                ItemModelUtils.rangeSelect(new Time(true, Time.TimeSource.RANDOM), 64.0F, list)
+//                        )
+//                );
+//    }
+//
+//    protected ResourceLocation createFlatItemModel(Item p_376880_, String p_375748_, ModelTemplate p_375473_) {
+//        return p_375473_.create(
+//                ModelLocationUtils.getModelLocation(p_376880_, p_375748_), TextureMapping.layer0(TextureMapping.getItemTexture(p_376880_, p_375748_)), this.modelOutput
+//        );
 //    }
 }
