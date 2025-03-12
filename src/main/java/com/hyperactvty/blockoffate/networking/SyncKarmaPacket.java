@@ -6,7 +6,11 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.network.NetworkContext;
+
+import java.util.function.Supplier;
 
 public class SyncKarmaPacket {
     private final int karma;
@@ -23,24 +27,36 @@ public class SyncKarmaPacket {
         return new SyncKarmaPacket(buffer.readInt());
     }
 
-    public static void handle(SyncKarmaPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
-        contextSupplier.get().enqueueWork(() -> {
+//    public static void handle(SyncKarmaPacket packet, Supplier<CustomPayloadEvent.Context> contextSupplier) {
+//        contextSupplier.get().enqueueWork(() -> {
+//            // Handle packet on the client side
+//            Player player = Minecraft.getInstance().player;
+//            if (player != null) {
+//                player.getCapability(CapabilityRegistry.KARMA).ifPresent(karmaCap -> karmaCap.setKarma(packet.karma));
+//            }
+//        });
+//        contextSupplier.get().setPacketHandled(true);
+//    }
+
+//    public static void syncKarmaToClient(Player player) {
+//        player.getCapability(CapabilityRegistry.KARMA).ifPresent(karmaCap -> {
+//            int karma = karmaCap.getKarma();
+//            NetworkHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player),
+//                    new SyncKarmaPacket(karma));
+//        });
+//    }
+
+    public static void handle(SyncKarmaPacket packet, CustomPayloadEvent.Context context) {
+        context.enqueueWork(() -> {
             // Handle packet on the client side
             Player player = Minecraft.getInstance().player;
             if (player != null) {
                 player.getCapability(CapabilityRegistry.KARMA).ifPresent(karmaCap -> karmaCap.setKarma(packet.karma));
             }
         });
-        contextSupplier.get().setPacketHandled(true);
+        context.setPacketHandled(true);
     }
 
-    public static void syncKarmaToClient(Player player) {
-        player.getCapability(CapabilityRegistry.KARMA).ifPresent(karmaCap -> {
-            int karma = karmaCap.getKarma();
-            NetworkHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player),
-                    new SyncKarmaPacket(karma));
-        });
-    }
 
 //    public SyncKarmaPacket(FriendlyByteBuf buf) {
 //        this.karma = buf.readInt();

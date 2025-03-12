@@ -44,18 +44,18 @@ public class ModItemModelProvider extends ModelProvider {
 //        super(output, consumer);
 //    }
 
-    protected final ItemModelOutput itemModelOutput;
+    protected final ItemModelOutput itemModelOutput = null;
     protected final BiConsumer<ResourceLocation, ModelInstance> modelOutput;
 
-    public ModItemModelProvider(ItemModelOutput p_375677_, BiConsumer<ResourceLocation, ModelInstance> p_377569_) {
-        super(p_375677_);
-        this.itemModelOutput = p_375677_;
-        this.modelOutput = p_377569_;
-    }
+//    public ModItemModelProvider(ItemModelOutput p_375677_, BiConsumer<ResourceLocation, ModelInstance> p_377569_) {
+//        super(p_375677_);
+//        this.itemModelOutput = p_375677_;
+//        this.modelOutput = p_377569_;
+//    }
 
     public ModItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
         super(output);
-        this.itemModelOutput = itemModelOutput;
+//        this.itemModelOutput = itemModelOutput;
 
         System.out.println("ModItemModelProvider Constructor called.");
 

@@ -40,31 +40,60 @@ public class ModClientEvents {
 //        this.itemModelOutput = itemModelOutput;
     }
 
-    public ModClientEvents(IEventBus eventBus) {
-//        this.itemModelOutput = itemModelOutput;
-        subscribe(eventBus);
-    }
-
-    // Registering the client tick event
-    public void subscribe(IEventBus eventBus) {
-        eventBus.addListener(this::onClientTick);
-        // Register item property for dynamic texture changes
-//        ModelPredicateProviderRegistry
-//        ModelManager.register(BlockItems.BoF_KARMA_METER_ITEM.get(), ResourceLocation.parse(MainMod.MODID+":karma"),
-//                (stack, world, entity, seed) -> {
-//                    if (world == null) return 0.0F;
+//    public ModClientEvents(IEventBus eventBus) {
+////        this.itemModelOutput = itemModelOutput;
+//        subscribe(eventBus);
+//    }
 //
-//                    // Get the player's karma or some other value to modify the texture
-//                    LocalPlayer player = Minecraft.getInstance().player;
-//                    if (player != null) {
-//                        double karma = getKarma(player); // You can replace this with how karma is tracked
-//                        return (float) karma; // This is where you tie karma to the texture change
-//                    }
-//                    return 0.0F;
-//                });
-    }
+//    // Registering the client tick event
+//    public void subscribe(IEventBus eventBus) {
+//        eventBus.addListener(this::onClientTick);
+//        // Register item property for dynamic texture changes
+////        ModelPredicateProviderRegistry
+////        ModelManager.register(BlockItems.BoF_KARMA_METER_ITEM.get(), ResourceLocation.parse(MainMod.MODID+":karma"),
+////                (stack, world, entity, seed) -> {
+////                    if (world == null) return 0.0F;
+////
+////                    // Get the player's karma or some other value to modify the texture
+////                    LocalPlayer player = Minecraft.getInstance().player;
+////                    if (player != null) {
+////                        double karma = getKarma(player); // You can replace this with how karma is tracked
+////                        return (float) karma; // This is where you tie karma to the texture change
+////                    }
+////                    return 0.0F;
+////                });
+//    }
 
     // The client tick event
+//    @SubscribeEvent
+//    public void onClientTick(TickEvent.ClientTickEvent event) {
+//        if (event.phase == TickEvent.Phase.START) {
+//            Minecraft minecraft = Minecraft.getInstance();
+//            LocalPlayer player = minecraft.player;
+//
+//            if (player != null) {
+//                // Check if player is holding the Karma Meter Item
+//                ItemStack heldItem = player.getMainHandItem();
+//                if (heldItem.getItem() instanceof BlockItem && heldItem.getItem() == BlockItems.BoF_KARMA_METER_ITEM.get()) {
+//                    Level world = Minecraft.getInstance().level;
+//                    long worldTime = world.getDayTime();
+//                    float timeNormalized = (float) (worldTime % 24000L) / 24000.0F;
+//                    double karmaNormalized = (worldTime % 24000L) / 24000.0F;
+//
+////                    generateClockItem(heldItem.getItem());
+//
+//                    System.err.println("onClientTick > "+"Karma Meter: " + (int) (timeNormalized * 100) + "%");
+//
+//
+//                    // Modify the item's tooltip dynamically
+////                    heldItem.getTooltip(player, minecraft.options.advancedItemTooltips ? TooltipFlag.Default.ADVANCED : TooltipFlag.Default.NORMAL)
+////                            .add(Component.literal("Karma Meter: " + (int) (timeNormalized * 100) + "%")
+////                                    .withStyle(Style.EMPTY.withBold(true).withColor(ChatFormatting.GREEN)));
+//                }
+//            }
+//        }
+//    }
+
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
@@ -78,17 +107,8 @@ public class ModClientEvents {
                     Level world = Minecraft.getInstance().level;
                     long worldTime = world.getDayTime();
                     float timeNormalized = (float) (worldTime % 24000L) / 24000.0F;
-                    double karmaNormalized = (worldTime % 24000L) / 24000.0F;
 
-//                    generateClockItem(heldItem.getItem());
-
-                    System.err.println("onClientTick > "+"Karma Meter: " + (int) (timeNormalized * 100) + "%");
-
-
-                    // Modify the item's tooltip dynamically
-//                    heldItem.getTooltip(player, minecraft.options.advancedItemTooltips ? TooltipFlag.Default.ADVANCED : TooltipFlag.Default.NORMAL)
-//                            .add(Component.literal("Karma Meter: " + (int) (timeNormalized * 100) + "%")
-//                                    .withStyle(Style.EMPTY.withBold(true).withColor(ChatFormatting.GREEN)));
+                    System.err.println("onClientTick > Karma Meter: " + (int) (timeNormalized * 100) + "%");
                 }
             }
         }

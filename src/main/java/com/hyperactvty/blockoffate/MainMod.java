@@ -168,7 +168,7 @@ public class MainMod {
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new KarmaEventHandler());
-        MinecraftForge.EVENT_BUS.register(new ModClientEvents(modEventBus));
+        MinecraftForge.EVENT_BUS.register(new ModClientEvents());
 
 
         // Register the item to a creative tab

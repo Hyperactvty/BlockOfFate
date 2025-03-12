@@ -21,6 +21,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
+// RegisterClientTooltipComponentFactoriesEvent
+
 import java.awt.*;
 import java.util.List;
 

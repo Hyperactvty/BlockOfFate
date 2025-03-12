@@ -13,8 +13,8 @@ import net.minecraftforge.fml.common.Mod;
 public class CapabilityRegistry {
     public static final Capability<IKarma> KARMA = CapabilityManager.get(new CapabilityToken<>() {});
 
-    @SubscribeEvent
-    public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
-        event.register(IKarma.class);
-    }
+//    @SubscribeEvent
+//    public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
+//        event.register(IKarma.class);
+//    }
 }
