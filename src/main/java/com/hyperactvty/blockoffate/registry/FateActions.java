@@ -28,8 +28,14 @@ public class FateActions {
         Killed_HostileMob_Epic,
         Killed_HostileMob_Elite,
         Killed_HostileMob_Boss,
-        BlockOfFate_Broken
+        BlockOfFate_Broken,
         //#endregion POSITIVE
+
+        //#region DEBUG
+        Debug_Reset,
+        Debug_Min,
+        Debug_Max
+        //#endregion DEBUG
     }
 
     public static double getActionEffect(Actions action) {
@@ -51,6 +57,12 @@ public class FateActions {
             case Killed_HostileMob_Boss -> 250.0;
             case BlockOfFate_Broken -> 5.0;
             //#endregion POSITIVE
+
+            //#region DEBUG
+            case Debug_Reset -> 0.0;
+            case Debug_Min -> -12000.0;
+            case Debug_Max -> 12000.0;
+            //#endregion DEBUG
         };
     }
 }

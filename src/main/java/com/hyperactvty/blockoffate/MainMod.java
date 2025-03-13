@@ -1,44 +1,32 @@
 package com.hyperactvty.blockoffate;
 
-import com.hyperactvty.blockoffate.blocks.BlockOfFate_Block;
+import com.hyperactvty.blockoffate.interfaces.CustomModelDataProvider;
+import com.hyperactvty.blockoffate.interfaces.ICustomModelData;
 import com.hyperactvty.blockoffate.registry.*;
+import com.hyperactvty.blockoffate.utilities.CustomItemRenderer;
 import com.hyperactvty.blockoffate.utilities.Fate;
-import com.hyperactvty.blockoffate.utilities.Utils;
+import com.hyperactvty.blockoffate.utilities.ModItemModelResolver;
 import com.mojang.logging.LogUtils;
-import net.minecraft.ChatFormatting;
-import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.item.ItemModelResolver;
+import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Tuple;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.item.component.CustomModelData;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -49,7 +37,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -57,8 +44,6 @@ import org.slf4j.Logger;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -309,9 +294,20 @@ public class MainMod {
         }
     }
 
-    public static void onWorldLoad(String[] args) {
-
+    public static MinecraftServer mcs;
+    public static void onWorldLoad(/*String[] args*/MinecraftServer server) {
+        mcs = server;
     }
+
+    public static void giveCustomItem(ServerPlayer player) {
+        ItemStack stack = new ItemStack(BlockItems.BoF_KARMA_METER_ITEM.get()); // Create the item
+        stack.getCapability(CustomModelDataProvider.CUSTOM_MODEL_DATA_CAPABILITY).ifPresent(cap -> {
+            cap.setCustomModelData(new CustomModelData(List.of(0.5F), List.of(), List.of("Test"), List.of(0xFFFFFF))); // Set custom model data
+        });
+        System.err.println("ADDED ITEM TO INVENTORY");
+        player.getInventory().add(stack); // Add the item to the player’s inventory
+    }
+
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
@@ -328,7 +324,7 @@ public class MainMod {
             if (setupCheck.setupComplete() == false) {
                 throw new LoadsIncomplete();
             }
-            onWorldLoad(null);
+            onWorldLoad(event.getServer());
         } catch (Exception e) {
             System.err.println("ERROR IN [onServerStarting] > "+e);
             throw new RuntimeException(e);
@@ -344,6 +340,12 @@ public class MainMod {
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
 
+//            event.enqueueWork(() -> {
+//                // Register your ItemModelResolver
+//                Minecraft.getInstance().getItemRenderer().getModelManager().setCustomItemModel(new ItemModelResolver(
+//                        Minecraft.getInstance().getModelManager()));
+//            });
+
             // #region KARMA METER
 //            ModClientEvents.subscribe(FMLJavaModLoadingContext.get().getModEventBus());
 ////            ModClientEvents.subscribe(FMLJavaModLoadingContext.get().getModEventBus());
@@ -354,9 +356,33 @@ public class MainMod {
 //            MinecraftForge.EVENT_BUS.register(new ModClientEvents(FMLJavaModLoadingContext));
 
 
+            event.enqueueWork(() -> {
+                ModelManager modelManager = Minecraft.getInstance().getModelManager();
+                ModItemModelResolver customResolver = new ModItemModelResolver(modelManager);
+
+
+
+                /**
+                ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
+                renderer.render(new ItemStack(BlockItems.BoF_KARMA_METER_ITEM.get()), ItemDisplayContext.FIRST_PERSON_RIGHT_HAND);
+                */
+                // Replace the renderer for your item
+//                CustomItemRenderer customItemRenderer = new CustomItemRenderer(customResolver);
+//                Minecraft.getInstance().getItemRenderer() = customItemRenderer;
+//                ItemRendererRegistry.register(KarmaMeter_Item.INSTANCE, new CustomKarmaMeterRenderer());
+                // Custom logic can be added here if needed
+                // Use your custom resolver for dynamically resolving item models
+//                Minecraft.getInstance().getItemRenderer().getModelManager().setCustomItemModelResolver(customResolver);
+                System.out.println("ModItemModelResolver initialized.");
+            });
+
             // #endregion KARMA METER
         }
 
+        @SubscribeEvent
+        public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+            event.register(ICustomModelData.class);
+        }
 
 //        @SubscribeEvent
 //        public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
@@ -413,6 +439,8 @@ public class MainMod {
             // Register advancement provider
             IEventBus modEventBus = MinecraftForge.EVENT_BUS;
             modEventBus.register(AdvancementsProvider.class);
+            giveCustomItem(mcs.getPlayerList().getPlayerByName("Dev"));
+
         }
 
         // #CHECKPOINT 0

@@ -50,7 +50,7 @@ public class Utils {
         if (player instanceof ServerPlayer serverPlayer) {
             StatsCounter statsCounter = serverPlayer.getStats();
             amt = statsCounter.getValue(Stats.CUSTOM.get(statList.get(statName)));
-            System.err.println("Player Stat > " + amt);
+//            System.err.println("Player Stat > " + amt);
         }
         return amt / (type.equals(double.class) ? (double) SCALE_FACTOR : 1);
     }//Stats.CUSTOM.get(statList.get(statName)); }
@@ -84,6 +84,11 @@ public class Utils {
         player.awardStat(Stats.CUSTOM.get(stat), scaledAmount); // Right one
 
 //        player.awardStat(Stats.CUSTOM.get(stat), Math.ceil(amount * 100));
+    }
+
+    public static void resetStat(Player player, String statName) {
+        ResourceLocation stat = statList.get(statName);
+        player.resetStat(Stats.CUSTOM.get(stat));
     }
 
     public static void decrementStat(Player player, String statName, int amount) {
@@ -158,4 +163,15 @@ public class Utils {
 
         return (red << 16) | (green << 8) | blue;
     }
+
+    public static int interpolateThreeColors(int startColor, int midColor, int endColor, float ratio) {
+        if (ratio < 0.5f) {
+            // First half: from startColor to midColor
+            return interpolateColor(startColor, midColor, ratio * 2);
+        } else {
+            // Second half: from midColor to endColor
+            return interpolateColor(midColor, endColor, (ratio - 0.5f) * 2);
+        }
+    }
+
 }

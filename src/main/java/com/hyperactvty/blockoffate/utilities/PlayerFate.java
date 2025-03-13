@@ -20,6 +20,11 @@ public class PlayerFate {
 
     public static void setKarma(Player player, FateActions.Actions action) {
         System.err.println("[Karma] "+player+" "+action+" : "+FateActions.getActionEffect(action)+" karma...");
+        // DEBUG
+        if(action.equals(FateActions.Actions.Debug_Reset)) {
+            Utils.resetStat(player, "karma");
+            return;
+        }
         Utils.incrementStat(player, "karma", FateActions.getActionEffect(action));
     }
 }

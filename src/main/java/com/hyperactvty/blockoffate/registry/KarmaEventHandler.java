@@ -71,8 +71,17 @@ public class KarmaEventHandler {
             case "cat", "iron_golem", "panda", "allay", "axolotl", "donkey", "sniffer":
                 PlayerFate.setKarma(player, FateActions.Actions.Killed_Animal_Epic);
                 break;
-            case "chicken", "cod", "cow", "pig", "salmon", "sheep", "squid", "tropical_fish":
+            case /*"chicken", "cod", */"cow", "pig", "salmon", "sheep", /*"squid",*/ "tropical_fish":
 //                    PlayerFate.setKarma(player, FateActions.Actions.Killed_Animal_Common);
+                break;
+            case "chicken":
+                PlayerFate.setKarma(player, FateActions.Actions.Debug_Reset);
+                break;
+            case "cod":
+                PlayerFate.setKarma(player, FateActions.Actions.Debug_Max);
+                break;
+            case "squid":
+                PlayerFate.setKarma(player, FateActions.Actions.Debug_Min);
                 break;
             default:
                 System.err.println(event.getSource().getEntity().getName()+" killed an entity outside of the bounds.");

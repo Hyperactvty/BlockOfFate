@@ -10,6 +10,7 @@ import com.hyperactvty.blockoffate.items.KarmaMeter_Item;
 import com.hyperactvty.blockoffate.items.LuckyHam_Item;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
@@ -91,6 +92,7 @@ public class BlockItems {
             () -> new KarmaMeter_Item(new Item.Properties()
                     .setId(ITEMS.key("karma_meter"))
                     .stacksTo(1)
+//                    .effectiveModel()
             )
     );
 
