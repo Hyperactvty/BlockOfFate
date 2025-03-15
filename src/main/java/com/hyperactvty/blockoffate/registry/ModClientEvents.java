@@ -112,13 +112,16 @@ public class ModClientEvents {
                 // Check if player is holding the Karma Meter Item
                 ItemStack heldItem = player.getMainHandItem();
                 if (heldItem.getItem() instanceof KarmaMeter_Item && heldItem.getItem() == BlockItems.BoF_KARMA_METER_ITEM.get()) {
+                    /** The GUI stuff*/
+//                    MainMod.ClientModEvents.getCustomGUI().displayOverlayMessage("Karma Meter Active!");
+
 //                    ((KarmaMeter_Item) heldItem.getItem()).getCustomModel(player);
 //                    heldItem.getItem().getOrCreateTag().putInt("karma", newValue); // Set the new value of karma
 //                    System.err.println("onClientTick > heldItem = "+heldItem);
 //                    heldItem.set(DataComponents.ITEM_MODEL, ((KarmaMeter_Item) heldItem.getItem()).getCustomModel(player));
 //                    System.err.println("heldItem > "+heldItem.getComponents().get(DataComponents.ITEM_MODEL));
 ////                    Minecraft.getInstance().levelRenderer.allChanged(); // Forces a render refresh
-                    System.err.println("Item CUSTOM_MODEL_DATA > "+heldItem.getItem().components().get(DataComponents.CUSTOM_MODEL_DATA));
+//                    System.err.println("Item CUSTOM_MODEL_DATA > "+heldItem.getItem().components().get(DataComponents.CUSTOM_MODEL_DATA));
 //
 ////                    ResourceLocation texture = heldItem.getItem().getRegistryName(); // Get the item's registered name
 //                    ResourceLocation texture = ((KarmaMeter_Item) heldItem.getItem()).getCustomModel(player); // Get the item's registered name
@@ -129,16 +132,16 @@ public class ModClientEvents {
 
 //                    CompoundTag tag = heldItem.serializeNBT().getCompound("tag");
 
-                    System.err.println("getTags > "+heldItem.getTags());
-                    heldItem.getTags().forEach(i->System.err.println("\tgetTags > "+i));
-                    System.err.println("immutableComponents > "+heldItem.immutableComponents());
-                    heldItem.immutableComponents().forEach(i->System.err.println("\timmutableComponents > "+i));
+//                    System.err.println("getTags > "+heldItem.getTags());
+//                    heldItem.getTags().forEach(i->System.err.println("\tgetTags > "+i));
+//                    System.err.println("immutableComponents > "+heldItem.immutableComponents());
+//                    heldItem.immutableComponents().forEach(i->System.err.println("\timmutableComponents > "+i));
 
 
                     /** ResourceLocation.fromNamespaceAndPath(MainMod.MODID, "karma_meter_00") */
                     // In the future, call `RenderProperties.get`
 //                    heldItem.getItem().initClient();
-                    System.err.println(heldItem.getItem().getRenderPropertiesInternal());
+//                    System.err.println(heldItem.getItem().getRenderPropertiesInternal());
 
 
                 }

@@ -26,7 +26,7 @@ public class ModItemModelResolver extends ItemModelResolver {
         this.modelGetter = p_377509_::getItemModel;
 
     }
-
+/**
     @Override
     public void appendItemLayers(
             ItemStackRenderState renderState,
@@ -37,7 +37,7 @@ public class ModItemModelResolver extends ItemModelResolver {
             int seed
     ) {
 
-        ResourceLocation modelLocation = ResourceLocation.fromNamespaceAndPath(MainMod.MODID, "item/karma_meter_00");//stack.get(DataComponents.ITEM_MODEL);
+        ResourceLocation modelLocation = ResourceLocation.fromNamespaceAndPath(MainMod.MODID, "item/karma_meter_default");//stack.get(DataComponents.ITEM_MODEL);
 
 //        System.out.println("ItemStack Model Location: " + modelLocation);
 
@@ -54,6 +54,7 @@ public class ModItemModelResolver extends ItemModelResolver {
                 entity+" | "+seed);
         System.out.println("appendItemLayers > " + this.modelGetter);
     }
+*/
 
 //    public void appendItemLayers(
 //            ItemStackRenderState renderState,

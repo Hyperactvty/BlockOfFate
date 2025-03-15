@@ -1,11 +1,14 @@
 package com.hyperactvty.blockoffate;
 
+import com.hyperactvty.blockoffate.gui.ModRenderGUI;
 import com.hyperactvty.blockoffate.interfaces.CustomModelDataProvider;
 import com.hyperactvty.blockoffate.interfaces.ICustomModelData;
 import com.hyperactvty.blockoffate.registry.*;
 import com.hyperactvty.blockoffate.utilities.CustomItemRenderer;
 import com.hyperactvty.blockoffate.utilities.Fate;
 import com.hyperactvty.blockoffate.utilities.ModItemModelResolver;
+import com.hyperactvty.blockoffate.utilities.ModItemProperties;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.logging.LogUtils;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
@@ -27,6 +30,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -334,11 +338,51 @@ public class MainMod {
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
+
+        private static ModRenderGUI customGUI;
+
+        public static void init() {
+            // Initialize your custom GUI with Minecraft's instance
+            customGUI = new ModRenderGUI(Minecraft.getInstance());
+//            ItemProperty property = ItemProperty.select()
+//                    .when("karma", 1).use("blockoffate:item/karma_meter_27")
+//                    .when("karma", 2).use("blockoffate:item/karma_meter_02");
+
+        }
+
+        public static ModRenderGUI getCustomGUI() {
+            return customGUI;
+        }
+
+        public static void render(PoseStack poseStack) {
+            if (customGUI != null) {
+                customGUI.renderOverlayText(poseStack);
+            }
+        }
+
+
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             // Some client setup code
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+
+            ModItemProperties.addCustomItemProperties();
+
+            init();
+
+            MinecraftForge.EVENT_BUS.register(new ModRenderGUI(Minecraft.getInstance()));
+
+//            MinecraftForge.EVENT_BUS.addListener((RenderLevelStageEvent event) -> {
+//                if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_GUI) {
+//                    ModClient.render(event.getPoseStack());
+//                }
+//            });
+
+
+
+
+//            Minecraft.getInstance().getItemRenderer().addSpecialRenderer(BlockItems.BoF_KARMA_METER_ITEM.get(), new KarmaMeterRenderer());
 
 //            event.enqueueWork(() -> {
 //                // Register your ItemModelResolver

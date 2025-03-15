@@ -4,24 +4,34 @@ import com.hyperactvty.blockoffate.MainMod;
 import com.hyperactvty.blockoffate.interfaces.CustomModelDataProvider;
 import com.hyperactvty.blockoffate.utilities.ModItemModelResolver;
 import com.hyperactvty.blockoffate.utilities.Utils;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 //import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.CustomModelData;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 // RegisterClientTooltipComponentFactoriesEvent
@@ -45,6 +55,7 @@ public class KarmaMeter_Item extends Item {
     private ItemStack stack = null;
     int karmaLevelThreshold = 750;
     int karmaLevel=0;
+    public int getKarmaLevel() { return karmaLevel; }
 
     @Override
     @OnlyIn(Dist.CLIENT)
@@ -79,6 +90,8 @@ public class KarmaMeter_Item extends Item {
             /** GET CAPABILITIES*/
             stack.getCapability(CustomModelDataProvider.CUSTOM_MODEL_DATA_CAPABILITY).ifPresent(cap -> {
                 CustomModelData data = cap.getCustomModelData();
+                System.err.println("GET CustomModelData > "+data);
+                if(data.getColor(0)==null) return;
                 col.set(data.getColor(0));
             });
 
@@ -96,9 +109,11 @@ public class KarmaMeter_Item extends Item {
             /* TESTING TO SEE IF CAPABILITIES WORK */
             stack.getCapability(CustomModelDataProvider.CUSTOM_MODEL_DATA_CAPABILITY).ifPresent(cap -> {
                 CustomModelData data = cap.getCustomModelData();
-                System.err.println("CustomModelData > "+data);
                 components.add(Component.literal("Model Data: ").append(String.valueOf(data.getFloat(0)))); // Example tooltip text
             });
+
+            MapCodec<CustomData> tmp = DataComponents.CUSTOM_DATA.codec().fieldOf("karma");
+            System.err.println("TMP > "+tmp);
 
 
             List<Component> componentsList = new ArrayList<>();
@@ -125,6 +140,68 @@ public class KarmaMeter_Item extends Item {
 
         }
     }
+
+//    @Override
+    @OnlyIn(Dist.CLIENT)
+    public ResourceLocation getCustomModel(@NotNull ItemStack stack, @Nullable LivingEntity entity) {
+//        System.err.println("getCustomModel > "+stack);
+        return stack.getCapability(CustomModelDataProvider.CUSTOM_MODEL_DATA_CAPABILITY)
+                .map(cap -> {
+                    int karma = cap.getCustomModelData().getFloat(0).intValue(); // Example: use the first color
+                    return ResourceLocation.parse("blockoffate:item/karma_meter_" +String.format("%02d", karma));
+                })
+                .orElse(ResourceLocation.parse("blockoffate:item/karma_meter_default"));
+    }
+
+    @Override
+    public InteractionResult useOn(UseOnContext context) {
+        ItemStack stack = context.getItemInHand();
+//        /** SET CAPABILITIES*/
+//        stack.getCapability(CustomModelDataProvider.CUSTOM_MODEL_DATA_CAPABILITY).ifPresent(cap -> {
+//            cap.setCustomModelData(new CustomModelData(List.of(), List.of(), List.of(), List.of()));
+//        });
+//        stack.getOrCreateTag().putInt("CustomModelData", (stack.getOrCreateTag().getInt("CustomModelData") + 1) % 3);
+        System.err.println("useOn > "+stack);
+        boolean changeModel=true;
+        if(changeModel) {
+//            ResourceLocation a = stack.set(DataComponents.ITEM_MODEL, ((KarmaMeter_Item) stack.getItem()).getCustomModel(player));
+//            ResourceLocation a = stack.set(DataComponents.ITEM_MODEL, ResourceLocation.parse(("blockoffate:karma_meter_" +String.format("%02d", karmaLevel)).toString()));
+            ResourceLocation a = stack.set(DataComponents.ITEM_MODEL, ResourceLocation.parse("minecraft:diamond"));
+            System.err.println("A > "+a);
+        }
+//        stack.set(DataComponents.CUSTOM_DATA, stack.getItem().getKarmaLevel());
+//        stack.set(DataComponents.CUSTOM_MODEL_DATA, this.karmaLevel);
+        CustomData.set(DataComponents.CUSTOM_DATA, stack, CompoundTag.builder().putInt("karma", 7).build());
+//        CustomData.set(DataComponents.CUSTOM_DATA, stack, CompoundTag.builder().putInt("karma", 7));
+//        CustomData b = stack.set(DataComponents.CUSTOM_DATA, );//.parseEntityId();
+        CustomData b = stack.get(DataComponents.CUSTOM_DATA);//.parseEntityId();
+        System.err.println("B > "+b);
+        try {
+            boolean c = stack.set(DataComponents.CUSTOM_MODEL_DATA, null).floats().add((float) this.karmaLevel);
+            System.err.println("C > "+stack.get(DataComponents.CUSTOM_MODEL_DATA));
+        } catch (Exception e) { }
+
+        stack.getComponents().stream().forEach(c -> {
+            System.err.println("\tComponent > "+c);
+
+        });
+
+
+        MainMod.ClientModEvents.getCustomGUI().displayOverlayMessage("Karma Meter Active!");
+        return InteractionResult.SUCCESS;
+    }
+
+//    @Override
+//    public String Properties.getDescriptionId(ItemStack stack) {
+//        return stack.getCapability(CustomModelDataProvider.CUSTOM_MODEL_DATA_CAPABILITY)
+//                .map(cap -> {
+//                    int karmaLevel = cap.getCustomModelData().getColor(0); // Example: Use color for model variant
+//                    return "item.blockoffate.karma_meter_" + karmaLevel;
+//                })
+//                .orElse(super.getDescriptionId(stack));
+//    }
+
+
 
     /*
 
@@ -181,7 +258,8 @@ public class KarmaMeter_Item extends Item {
         );
 
         // Apply the resolved render state to the item
-        System.out.println("Called ModItemModelResolver.appendItemLayers for dynamic rendering.");
+        getCustomModel(stack, entity);
+//        System.out.println("Called ModItemModelResolver.appendItemLayers for dynamic rendering.");
     }
 
 
@@ -198,18 +276,18 @@ public class KarmaMeter_Item extends Item {
 //    }
 
     // Setting CustomModelData
-    public static void setCustomModelData(ItemStack stack, List<Float> floats, List<Boolean> flags, List<String> strings, List<Integer> colors) {
-        CustomModelData customModelData = new CustomModelData(floats, flags, strings, colors);
-        // Use the appropriate way to associate this with the stack (e.g., through capabilities or serialization)
-//        stack.getCapability(CustomModelDataCapability.INSTANCE).ifPresent(cap -> {
-//            cap.setCustomModelData(customModelData);
+//    public static void setCustomModelData(ItemStack stack, List<Float> floats, List<Boolean> flags, List<String> strings, List<Integer> colors) {
+//        CustomModelData customModelData = new CustomModelData(floats, flags, strings, colors);
+//        // Use the appropriate way to associate this with the stack (e.g., through capabilities or serialization)
+////        stack.getCapability(CustomModelDataCapability.INSTANCE).ifPresent(cap -> {
+////            cap.setCustomModelData(customModelData);
+////        });
+//
+//        stack.getCapability(CustomModelDataProvider.CUSTOM_MODEL_DATA_CAPABILITY).ifPresent(cap -> {
+//            cap.setCustomModelData(new CustomModelData(List.of(1.0F), List.of(), List.of(), List.of(0xFFFFFF)));
 //        });
-
-        stack.getCapability(CustomModelDataProvider.CUSTOM_MODEL_DATA_CAPABILITY).ifPresent(cap -> {
-            cap.setCustomModelData(new CustomModelData(List.of(1.0F), List.of(), List.of(), List.of(0xFFFFFF)));
-        });
-
-    }
+//
+//    }
 
     @Override
 //    public void inventoryTick(ItemStack stack, Level level, LivingEntity entity, int slot, boolean selected) {
@@ -231,6 +309,12 @@ public class KarmaMeter_Item extends Item {
                 player = _player;
             }
             ResourceLocation gcm = getCustomModel(/*stack, _level, */_player);
+
+//            Item.Properties ip = new Properties();
+//            DataComponentMap datacomponentmap = this.components
+//                    .set(DataComponents.ITEM_NAME, p_361375_)
+//                    .set(DataComponents.ITEM_MODEL, gcm)
+//                    .build();
 //            DataComponents dc = new DataComponents();
 //            new CustomModelData()
 
@@ -242,14 +326,14 @@ public class KarmaMeter_Item extends Item {
                 stack.getCapability(CustomModelDataProvider.CUSTOM_MODEL_DATA_CAPABILITY).ifPresent(cap -> {
                     // Update the model data dynamically based on some condition
                     int karma = getPlayerKarma(player);
-                    cap.setCustomModelData(new CustomModelData(List.of((float) (karma / KARMA_LEVEL_ITERATIONS)), List.of(), List.of(), List.of()));
+                    cap.setCustomModelData(new CustomModelData(List.of((float) (karma / KARMA_LEVEL_ITERATIONS)), List.of(), List.of(String.valueOf(gcm)), List.of()));
                 });
             }
 
             /** GET CAPABILITIES*/
             stack.getCapability(CustomModelDataProvider.CUSTOM_MODEL_DATA_CAPABILITY).ifPresent(cap -> {
                 CustomModelData data = cap.getCustomModelData();
-                System.out.println("CustomModelData: " + data);
+//                System.out.println("CustomModelData: " + data+"\n\tgcm > "+gcm);
             });
 //            System.err.println("getPlayerKarma > "+getPlayerKarma(MainMod.mcs.getPlayerList().getPlayerByName(player.getDisplayName().getString()))+" | "+gcm.toString());
         }
@@ -317,12 +401,11 @@ public class KarmaMeter_Item extends Item {
     public ResourceLocation getCustomModel(/*ItemStack stack, @Nullable Level level, */@Nullable LivingEntity entity) {
         if (entity instanceof Player player) {
             int karma = getPlayerKarma(player); // Fetch player karma dynamically
-            return ResourceLocation.fromNamespaceAndPath(MainMod.MODID, "karma_meter_"+String.format("%02d", karma));
-//            if (karma <= 0) return ResourceLocation.fromNamespaceAndPath(MainMod.MODID, "item/karma_meter_00");
-//            else if (karma <= 1) return ResourceLocation.fromNamespaceAndPath(MainMod.MODID, "item/karma_meter_01");
-//            else if (karma <= 2) return ResourceLocation.fromNamespaceAndPath(MainMod.MODID, "item/karma_meter_02");
+            return ResourceLocation.parse(MainMod.MODID+":item/karma_meter_" +String.format("%02d", karma));
+//            return ResourceLocation.fromNamespaceAndPath(MainMod.MODID, "karma_meter_"+String.format("%02d", karma));
         }
-        return ResourceLocation.fromNamespaceAndPath(MainMod.MODID, "karma_meter_00");
+        return ResourceLocation.parse(MainMod.MODID+":item/karma_meter_default");
+//        return ResourceLocation.fromNamespaceAndPath(MainMod.MODID, "karma_meter_00");
     }
 
     private int getPlayerKarma(Player player) {
@@ -338,7 +421,7 @@ public class KarmaMeter_Item extends Item {
 
         /** SET CAPABILITIES*/
         stack.getCapability(CustomModelDataProvider.CUSTOM_MODEL_DATA_CAPABILITY).ifPresent(cap -> {
-            cap.setCustomModelData(new CustomModelData(List.of((float) karmaCalculation), List.of(), List.of(), List.of(interpolatedColor)));
+            cap.setCustomModelData(new CustomModelData(List.of((float) karmaCalculation), List.of(), List.of("karma"), List.of(interpolatedColor)));
         });
 
         // Fetch the player's karma value using your custom Capability or logic
