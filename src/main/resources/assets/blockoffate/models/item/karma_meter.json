@@ -1,0 +1,17 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "blockoffate:item/karma_meter_default"
+  },
+  "overrides": [
+    {
+      "predicate": { "blockoffate:karma": 1 },
+      "model": "blockoffate:item/karma_meter_27"
+    },
+    { "predicate": { "karma": 0 }, "model": "blockoffate:item/karma_meter_05" },
+    { "predicate": { "blockoffate:karma": 0 }, "model": "blockoffate:item/karma_meter_default" },
+    { "predicate": { "karma": 2 }, "model": "blockoffate:item/karma_meter_02" },
+    { "predicate": { "karma": 7 }, "model": "blockoffate:item/karma_meter_07" },
+    { "predicate": { "blockoffate:karma": 7 }, "model": "blockoffate:item/karma_meter_22" }
+  ]
+}
