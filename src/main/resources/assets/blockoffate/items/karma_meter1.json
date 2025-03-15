@@ -1,0 +1,40 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "blockoffate:item/karma_meter_default"
+  },
+  "overrides": [
+    { "predicate": { "karma": 0 }, "model": "blockoffate:item/karma_meter_00" },
+    { "predicate": { "karma": 1 }, "model": "blockoffate:item/karma_meter_01" },
+    { "predicate": { "karma": 2 }, "model": "blockoffate:item/karma_meter_02" },
+    { "predicate": { "karma": 3 }, "model": "blockoffate:item/karma_meter_03" },
+    { "predicate": { "karma": 4 }, "model": "blockoffate:item/karma_meter_04" },
+    { "predicate": { "karma": 5 }, "model": "blockoffate:item/karma_meter_05" },
+    { "predicate": { "karma": 6 }, "model": "blockoffate:item/karma_meter_06" },
+    { "predicate": { "karma": 7 }, "model": "blockoffate:item/karma_meter_07" },
+    { "predicate": { "karma": 8 }, "model": "blockoffate:item/karma_meter_08" },
+    { "predicate": { "karma": 9 }, "model": "blockoffate:item/karma_meter_09" },
+    { "predicate": { "karma": 10 }, "model": "blockoffate:item/karma_meter_10" },
+    { "predicate": { "karma": 11 }, "model": "blockoffate:item/karma_meter_11" },
+    { "predicate": { "karma": 12 }, "model": "blockoffate:item/karma_meter_12" },
+    { "predicate": { "karma": 13 }, "model": "blockoffate:item/karma_meter_13" },
+    { "predicate": { "karma": 14 }, "model": "blockoffate:item/karma_meter_14" },
+    { "predicate": { "karma": 15 }, "model": "blockoffate:item/karma_meter_15" },
+    { "predicate": { "karma": 16 }, "model": "blockoffate:item/karma_meter_16" },
+    { "predicate": { "karma": 17 }, "model": "blockoffate:item/karma_meter_17" },
+    { "predicate": { "karma": 18 }, "model": "blockoffate:item/karma_meter_18" },
+    { "predicate": { "karma": 19 }, "model": "blockoffate:item/karma_meter_19" },
+    { "predicate": { "karma": 20 }, "model": "blockoffate:item/karma_meter_20" },
+    { "predicate": { "karma": 21 }, "model": "blockoffate:item/karma_meter_21" },
+    { "predicate": { "karma": 22 }, "model": "blockoffate:item/karma_meter_22" },
+    { "predicate": { "karma": 23 }, "model": "blockoffate:item/karma_meter_23" },
+    { "predicate": { "karma": 24 }, "model": "blockoffate:item/karma_meter_24" },
+    { "predicate": { "karma": 25 }, "model": "blockoffate:item/karma_meter_25" },
+    { "predicate": { "karma": 26 }, "model": "blockoffate:item/karma_meter_26" },
+    { "predicate": { "karma": 27 }, "model": "blockoffate:item/karma_meter_27" },
+    { "predicate": { "karma": 28 }, "model": "blockoffate:item/karma_meter_28" },
+    { "predicate": { "karma": 29 }, "model": "blockoffate:item/karma_meter_29" },
+    { "predicate": { "karma": 30 }, "model": "blockoffate:item/karma_meter_30" },
+    { "predicate": { "karma": 31 }, "model": "blockoffate:item/karma_meter_31" }
+  ]
+}
